@@ -1,0 +1,40 @@
+copyBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    
+    const title = this.dataset.title;
+    const artist = this.dataset.artist;
+    const textToCopy = `${artist} - ${title}`.trim();
+    const tooltip = this.querySelector('.copy-tooltip');
+
+    // Try using Clipboard API
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            showTooltip(tooltip);
+        }).catch(() => {
+            fallbackCopyText(textToCopy, tooltip);
+        });
+    } else {
+        fallbackCopyText(textToCopy, tooltip);
+    }
+
+    function showTooltip(tooltipEl) {
+        tooltipEl.classList.add('show');
+        setTimeout(() => {
+            tooltipEl.classList.remove('show');
+        }, 2500);
+    }
+
+    function fallbackCopyText(text, tooltipEl) {
+        const tempInput = document.createElement('input');
+        tempInput.value = text;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        try {
+            document.execCommand('copy');
+            showTooltip(tooltipEl);
+        } catch (err) {
+            console.error('Fallback: Copy command failed', err);
+        }
+        document.body.removeChild(tempInput);
+    }
+});
