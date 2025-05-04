@@ -203,18 +203,24 @@
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   }
 
-  /* 浮動按鈕容器 */
+  /* 浮動按鈕容器 - 調整位置更高一點 */
   .floating-buttons {
     position: fixed;
-    bottom: 6.5rem;
+    bottom: 10rem; /* 調整位置更高一點，避免與已選歌曲區域重疊 */
     right: 1.5rem;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
     z-index: 60;
+    transition: bottom 0.3s ease; /* 添加過渡效果 */
   }
 
-  /* 浮動按鈕基本樣式 */
+  /* 當面板打開時，浮動按鈕位置更高 */
+  .floating-buttons.panel-open {
+    bottom: 22rem; /* 面板打開時的位置 */
+  }
+
+  /* 浮動按鈕基本樣式 - 增加透明度 */
   .floating-button {
     width: 3.5rem;
     height: 3.5rem;
@@ -224,27 +230,33 @@
     justify-content: center;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     transition: all 0.3s ease;
-    opacity: 0.8;
+    opacity: 0.7; /* 增加透明度 */
     font-size: 0.875rem;
     font-weight: 500;
   }
 
   .floating-button:hover {
     transform: translateY(-2px);
-    opacity: 0.95;
+    opacity: 0.9; /* 懸停時的透明度 */
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   }
 
   /* 置頂按鈕 */
   .back-to-top {
-    background-color: rgba(79, 70, 229, 0.85);
+    background-color: rgba(79, 70, 229, 0.75); /* 更透明 */
     color: white;
   }
 
   /* 清除分類按鈕 */
   .clear-categories-btn {
-    background-color: rgba(239, 68, 68, 0.85);
+    background-color: rgba(239, 68, 68, 0.75); /* 更透明 */
     color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.2;
+    padding: 0.25rem;
   }
 
   /* 隱藏按鈕 */
@@ -599,10 +611,11 @@
   </div>
 
   <!-- 浮動按鈕區域 -->
-  <div class="floating-buttons">
-    <!-- 清除分類按鈕 -->
+  <div id="floating-buttons" class="floating-buttons">
+    <!-- 清除分類按鈕 - 文字分成兩行 -->
     <button id="floating-clear-categories" class="floating-button clear-categories-btn hidden" aria-label="清除分類">
-      清除分類
+      <span>清除</span>
+      <span>分類</span>
     </button>
     
     <!-- 置頂按鈕 -->
@@ -831,6 +844,7 @@
   const toastNotification = document.getElementById('toast-notification');
   
   // 浮動按鈕元素
+  const floatingButtonsContainer = document.getElementById('floating-buttons');
   const floatingBackToTop = document.getElementById('floating-back-to-top');
   const floatingClearCategories = document.getElementById('floating-clear-categories');
   
@@ -953,10 +967,12 @@
       selectedSongsPanel.classList.add('open');
       togglePanelIcon.classList.add('open');
       togglePanelBtn.querySelector('span').textContent = '隱藏已選歌曲';
+      floatingButtonsContainer.classList.add('panel-open'); // 添加面板打開時的類
     } else {
       selectedSongsPanel.classList.remove('open');
       togglePanelIcon.classList.remove('open');
       togglePanelBtn.querySelector('span').textContent = '查看已選歌曲';
+      floatingButtonsContainer.classList.remove('panel-open'); // 移除面板打開時的類
     }
   }
 
@@ -1144,6 +1160,13 @@
       floatingClearCategories.classList.remove('hidden');
     } else {
       floatingClearCategories.classList.add('hidden');
+    }
+    
+    // 根據面板狀態調整浮動按鈕位置
+    if (isPanelOpen) {
+      floatingButtonsContainer.classList.add('panel-open');
+    } else {
+      floatingButtonsContainer.classList.remove('panel-open');
     }
   }
 
@@ -1346,7 +1369,7 @@
     
     // 添加新的歌曲項目
     selectedSongsArray.forEach(song => {
-      // 獲��語言顏色
+      // 獲取語言顏色
       const colorClass = getLanguageColorClass(song.language);
       
       const songItem = document.createElement('div');
@@ -1376,6 +1399,7 @@
     });
     
     updateClearButtonState();
+    updateFloatingButtonsState(); // 更新浮動按鈕位置
   }
 
   // 獲取語言顏色類別 (用於已選歌曲項目)
