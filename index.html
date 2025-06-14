@@ -247,8 +247,8 @@
     color: white;
   }
 
-  /* 清除所有按鈕 */
-  .clear-all-btn {
+  /* 清除分類按鈕 */
+  .clear-categories-btn {
     background-color: rgba(239, 68, 68, 0.75); /* 更透明 */
     color: white;
     display: flex;
@@ -299,7 +299,7 @@
     animation: spinner 0.6s linear infinite;
   }
 
-  /* 清除所有按鈕樣式 */
+  /* 清除按鈕樣式 */
   .clear-button {
     transition: all 0.3s ease;
   }
@@ -559,10 +559,10 @@
           </div>
         </div>
         <button
-          id="clear-all"
+          id="clear-categories"
           class="clear-button ml-2 text-sm text-red-600 hover:text-red-800 font-medium px-3 py-1 bg-red-50 rounded-lg hover:bg-red-100 transition-colors disabled"
         >
-          清除所有
+          清除分類
         </button>
       </div>
     </div>
@@ -612,10 +612,10 @@
 
   <!-- 浮動按鈕區域 -->
   <div id="floating-buttons" class="floating-buttons">
-    <!-- 清除所有按鈕 - 文字分成兩行 -->
-    <button id="floating-clear-all" class="floating-button clear-all-btn hidden" aria-label="清除所有">
+    <!-- 清除分類按鈕 - 文字分成兩行 -->
+    <button id="floating-clear-categories" class="floating-button clear-categories-btn hidden" aria-label="清除分類">
       <span>清除</span>
-      <span>所有</span>
+      <span>分類</span>
     </button>
     
     <!-- 置頂按鈕 -->
@@ -840,13 +840,13 @@
   const retryButton = document.getElementById('retry-button');
   const emptyState = document.getElementById('empty-state');
   const songsGrid = document.getElementById('songs-grid');
-  const clearAllButton = document.getElementById('clear-all');
+  const clearCategoriesButton = document.getElementById('clear-categories'); // Changed ID
   const toastNotification = document.getElementById('toast-notification');
   
   // 浮動按鈕元素
   const floatingButtonsContainer = document.getElementById('floating-buttons');
   const floatingBackToTop = document.getElementById('floating-back-to-top');
-  const floatingClearAll = document.getElementById('floating-clear-all');
+  const floatingClearCategories = document.getElementById('floating-clear-categories'); // Changed ID
   
   // 底部面板元素
   const selectedSongsPanel = document.getElementById('selected-songs-panel');
@@ -881,14 +881,14 @@
       searchInput.focus();
     });
 
-    // 清除所有按鈕
-    clearAllButton.addEventListener('click', () => {
-      clearAllFilters();
+    // 清除分類按鈕
+    clearCategoriesButton.addEventListener('click', () => { // Changed event listener
+      clearCategories(); // Call the specific function
     });
     
-    // 浮動清除所有按鈕
-    floatingClearAll.addEventListener('click', () => {
-      clearAllFilters();
+    // 浮動清除分類按鈕
+    floatingClearCategories.addEventListener('click', () => { // Changed event listener
+      clearCategories(); // Call the specific function
     });
 
     // 浮動置頂按鈕
@@ -904,13 +904,13 @@
       if (window.scrollY > 300) {
         floatingBackToTop.classList.remove('hidden');
         
-        // 如果有任何篩選條件，也顯示清除所有按鈕
-        if (hasAnyFilters()) {
-          floatingClearAll.classList.remove('hidden');
+        // 如果有選中的分類，也顯示清除分類按鈕
+        if (selectedCategories.size > 0) { // Only check selected categories
+          floatingClearCategories.classList.remove('hidden');
         }
       } else {
         floatingBackToTop.classList.add('hidden');
-        floatingClearAll.classList.add('hidden');
+        floatingClearCategories.classList.add('hidden');
       }
     });
 
@@ -942,29 +942,13 @@
     });
   }
   
-  // 檢查是否有任何篩選條件
-  function hasAnyFilters() {
-    return selectedCategories.size > 0 || 
-           currentLanguageFilter !== 'all' || 
-           searchInput.value.trim() !== '';
-  }
-  
-  // 清除所有篩選條件
-  function clearAllFilters() {
-    // 清除搜尋框
-    searchInput.value = '';
-    
-    // 清除分類篩選
-    selectedCategories.clear();
-    
-    // 清除語言篩選
-    currentLanguageFilter = 'all';
-    
-    // 更新UI
-    updateSelectedCategoriesUI();
-    updateLanguageFilterUI();
-    filterSongs();
-    toggleSearchClearButton();
+  // 清除分類篩選條件
+  function clearCategories() { // Renamed function
+    if (selectedCategories.size > 0) {
+      selectedCategories.clear();
+      updateSelectedCategoriesUI();
+      filterSongs();
+    }
   }
   
   // 切換搜索框清除按鈕顯示狀態
@@ -1172,11 +1156,11 @@
 
   // 更新浮動按鈕狀態
   function updateFloatingButtonsState() {
-    // 如果有任何篩選條件且已經滾動，顯示清除所有按鈕
-    if (hasAnyFilters() && window.scrollY > 300) {
-      floatingClearAll.classList.remove('hidden');
+    // 如果有選中的分類且已經滾動，顯示清除分類按鈕
+    if (selectedCategories.size > 0 && window.scrollY > 300) { // Only check selected categories
+      floatingClearCategories.classList.remove('hidden');
     } else {
-      floatingClearAll.classList.add('hidden');
+      floatingClearCategories.classList.add('hidden');
     }
     
     // 根據面板狀態調整浮動按鈕位置
@@ -1219,10 +1203,10 @@
 
   // 更新清除按鈕狀態
   function updateClearButtonState() {
-    if (hasAnyFilters()) {
-      clearAllButton.classList.remove('disabled');
+    if (selectedCategories.size > 0) { // Only check selected categories
+      clearCategoriesButton.classList.remove('disabled');
     } else {
-      clearAllButton.classList.add('disabled');
+      clearCategoriesButton.classList.add('disabled');
     }
 
     if (selectedSongs.size > 0) {
