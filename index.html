@@ -247,8 +247,8 @@
     color: white;
   }
 
-  /* 清除分類按鈕 */
-  .clear-categories-btn {
+  /* 清除全部按鈕 */
+  .clear-all-btn {
     background-color: rgba(239, 68, 68, 0.75); /* 更透明 */
     color: white;
     display: flex;
@@ -612,10 +612,10 @@
 
   <!-- 浮動按鈕區域 -->
   <div id="floating-buttons" class="floating-buttons">
-    <!-- 清除分類按鈕 - 文字分成兩行 -->
-    <button id="floating-clear-categories" class="floating-button clear-categories-btn hidden" aria-label="清除分類">
+    <!-- 清除全部按鈕 - 文字分成兩行 -->
+    <button id="floating-clear-all" class="floating-button clear-all-btn hidden" aria-label="清除全部">
       <span>清除</span>
-      <span>分類</span>
+      <span>全部</span>
     </button>
     
     <!-- 置頂按鈕 -->
@@ -840,13 +840,13 @@
   const retryButton = document.getElementById('retry-button');
   const emptyState = document.getElementById('empty-state');
   const songsGrid = document.getElementById('songs-grid');
-  const clearCategoriesButton = document.getElementById('clear-categories'); // Changed ID
+  const clearCategoriesButton = document.getElementById('clear-categories'); 
   const toastNotification = document.getElementById('toast-notification');
   
   // 浮動按鈕元素
   const floatingButtonsContainer = document.getElementById('floating-buttons');
   const floatingBackToTop = document.getElementById('floating-back-to-top');
-  const floatingClearCategories = document.getElementById('floating-clear-categories'); // Changed ID
+  const floatingClearAll = document.getElementById('floating-clear-all'); // Changed ID
   
   // 底部面板元素
   const selectedSongsPanel = document.getElementById('selected-songs-panel');
@@ -881,14 +881,14 @@
       searchInput.focus();
     });
 
-    // 清除分類按鈕
-    clearCategoriesButton.addEventListener('click', () => { // Changed event listener
-      clearCategories(); // Call the specific function
+    // 清除分類按鈕 (篩選處的按鈕)
+    clearCategoriesButton.addEventListener('click', () => {
+      clearCategories(); // 保持只清除分類的功能
     });
     
-    // 浮動清除分類按鈕
-    floatingClearCategories.addEventListener('click', () => { // Changed event listener
-      clearCategories(); // Call the specific function
+    // 浮動清除全部按鈕
+    floatingClearAll.addEventListener('click', () => { // Changed event listener
+      resetAllFiltersAndSelections(); // Call the new function to reset everything
     });
 
     // 浮動置頂按鈕
@@ -904,13 +904,13 @@
       if (window.scrollY > 300) {
         floatingBackToTop.classList.remove('hidden');
         
-        // 如果有選中的分類，也顯示清除分類按鈕
-        if (selectedCategories.size > 0) { // Only check selected categories
-          floatingClearCategories.classList.remove('hidden');
+        // 如果有任何篩選條件或已選歌曲，顯示清除全部按鈕
+        if (hasAnyFiltersOrSelections()) { // Check for any filters or selections
+          floatingClearAll.classList.remove('hidden');
         }
       } else {
         floatingBackToTop.classList.add('hidden');
-        floatingClearCategories.classList.add('hidden');
+        floatingClearAll.classList.add('hidden');
       }
     });
 
@@ -942,13 +942,45 @@
     });
   }
   
+  // 檢查是否有任何篩選條件或已選歌曲
+  function hasAnyFiltersOrSelections() {
+    return selectedCategories.size > 0 || 
+           currentLanguageFilter !== 'all' || 
+           searchInput.value.trim() !== '' ||
+           selectedSongs.size > 0; // Also check selected songs
+  }
+
   // 清除分類篩選條件
-  function clearCategories() { // Renamed function
+  function clearCategories() {
     if (selectedCategories.size > 0) {
       selectedCategories.clear();
       updateSelectedCategoriesUI();
       filterSongs();
     }
+  }
+
+  // 重置所有篩選條件和已選歌曲
+  function resetAllFiltersAndSelections() {
+    // 清除搜尋框
+    searchInput.value = '';
+    
+    // 清除分類篩選
+    selectedCategories.clear();
+    
+    // 清除語言篩選
+    currentLanguageFilter = 'all';
+    
+    // 清除已選歌曲
+    selectedSongs.clear();
+
+    // 更新UI
+    updateSelectedCategoriesUI();
+    updateLanguageFilterUI();
+    updatePanelUI(); // Update panel for cleared songs
+    filterSongs(); // Re-filter to show all songs
+    toggleSearchClearButton();
+    updateClearButtonState(); // Update state of all clear buttons
+    updateFloatingButtonsState(); // Update floating button visibility
   }
   
   // 切換搜索框清除按鈕顯示狀態
@@ -1156,11 +1188,11 @@
 
   // 更新浮動按鈕狀態
   function updateFloatingButtonsState() {
-    // 如果有選中的分類且已經滾動，顯示清除分類按鈕
-    if (selectedCategories.size > 0 && window.scrollY > 300) { // Only check selected categories
-      floatingClearCategories.classList.remove('hidden');
+    // 如果有任何篩選條件或已選歌曲且已經滾動，顯示清除全部按鈕
+    if (hasAnyFiltersOrSelections() && window.scrollY > 300) {
+      floatingClearAll.classList.remove('hidden');
     } else {
-      floatingClearCategories.classList.add('hidden');
+      floatingClearAll.classList.add('hidden');
     }
     
     // 根據面板狀態調整浮動按鈕位置
@@ -1203,10 +1235,18 @@
 
   // 更新清除按鈕狀態
   function updateClearButtonState() {
-    if (selectedCategories.size > 0) { // Only check selected categories
+    // 篩選處的「清除分類」按鈕只檢查 selectedCategories
+    if (selectedCategories.size > 0) {
       clearCategoriesButton.classList.remove('disabled');
     } else {
       clearCategoriesButton.classList.add('disabled');
+    }
+
+    // 底部和浮動的「清除全部」按鈕檢查所有篩選和選取
+    if (hasAnyFiltersOrSelections()) {
+      // floatingClearAll.classList.remove('disabled'); // Floating button doesn't have disabled class
+    } else {
+      // floatingClearAll.classList.add('disabled'); // Floating button doesn't have disabled class
     }
 
     if (selectedSongs.size > 0) {
@@ -1238,6 +1278,7 @@
         }
         updateLanguageFilterUI();
         filterSongs();
+        updateClearButtonState(); // Update clear button state after language filter change
       });
       languageFilter.appendChild(button);
     });
@@ -1543,6 +1584,8 @@
     
     updateSelectedSongsUI();
     updatePanelUI();
+    updateClearButtonState(); // Update clear button state after song selection change
+    updateFloatingButtonsState(); // Update floating button visibility
   }
 
   // 切換分類選擇
@@ -1556,6 +1599,8 @@
     updateSelectedCategoriesUI();
     updateCategoryFilterUI();
     filterSongs();
+    updateClearButtonState(); // Update clear button state after category filter change
+    updateFloatingButtonsState(); // Update floating button visibility
   }
 
   // 複製到剪貼簿
