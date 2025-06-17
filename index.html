@@ -194,14 +194,19 @@
 
   .song-card {
     transition: all 0.3s ease;
-    transform: translateZ(0);
-    will-change: transform, box-shadow;
-  }
+  transform: translateZ(0);
+  will-change: transform, box-shadow;
+  box-shadow:
+  0 5px 5px -1px rgba(0, 0, 0, 0.15),   /* 第一層：比 hover 的第一層更輕微 */
+  0 0px 5px 0px rgba(0, 0, 0, 0.08);  /* 第二層：比 hover 的第二層更輕微 */
+}
 
-  .song-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  }
+.song-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+  0 10px 5px -3px rgba(0, 0, 0, 0.17), 
+  0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
 
   /* 浮動按鈕容器 - 調整位置更高一點 */
   .floating-buttons {
@@ -1500,7 +1505,7 @@
     const isSelected = selectedSongs.has(song.id);
   
     const card = document.createElement('div');
-    card.className = `song-card bg-white rounded-lg shadow p-2.5 border-l-4 ${getLanguageColor(song.language)} hover:border-indigo-500 relative transition-all duration-300 hover:-translate-y-1 hover:shadow-md ${isSelected ? 'selected' : ''}`;
+    card.className = `song-card bg-white rounded-lg p-2.5 border-l-4 ${getLanguageColor(song.language)} hover:border-indigo-500 relative transition-all duration-300 hover:-translate-y-1 ${isSelected ? 'selected' : ''}`;
     card.dataset.songId = song.id;
     card.classList.add('cursor-pointer');
   
