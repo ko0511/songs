@@ -2,10 +2,10 @@
 <html lang="zh-TW">
 <head>
 
-<link rel="shortcut icon" href="./favicon.ico?v=20250619"/>
-<link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png?v=20250619">
-<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png?v=20250619">
-<link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png?v=20250619">
+<link rel="shortcut icon" href="./favicon.ico"/>
+<link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
 <link rel="manifest" href="./site.webmanifest">
 
 <meta charset="UTF-8">
@@ -107,6 +107,7 @@ body::before {
   /* 標題特效 - 重新設計 - 紫灰漸層 */
   .title-effect {
     letter-spacing: 0.15em;
+    margin-left: 0.15em;
     background: linear-gradient(120deg, #c8b6e2, #a393bf, #8a7a99);
     -webkit-background-clip: text;
     background-clip: text;
@@ -116,8 +117,7 @@ body::before {
     text-shadow: 1px 2px 4px rgba(138, 122, 153, 0.15);
     animation: titleShimmer 3s infinite;
     font-weight: 800;
-    width: 100%; /* 確保標題寬度為100% */
-    text-align: center; /* 確保標題文字置中 */
+    text-align: center;
   }
 
   @keyframes titleShimmer {
@@ -144,13 +144,6 @@ body::before {
     z-index: -1;
     border-radius: 50%;
     filter: blur(8px);
-  }
-
-  /* 確保副標題置中 */
-  .subtitle {
-    width: 100%;
-    text-align: center;
-    display: block;
   }
 
   @keyframes spinner {
