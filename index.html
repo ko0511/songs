@@ -919,7 +919,7 @@ body::before {
 
     // 監聽滾動事件
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 300) {
+      if (window.scrollY > 70) {
         floatingBackToTop.classList.remove('hidden');
         
         // 如果有任何篩選條件或已選歌曲，顯示清除全部按鈕
@@ -1207,7 +1207,7 @@ body::before {
   // 更新浮動按鈕狀態
   function updateFloatingButtonsState() {
     // 如果有任何篩選條件或已選歌曲且已經滾動，顯示清除全部按鈕
-    if (hasAnyFiltersOrSelections() && window.scrollY > 300) {
+    if (hasAnyFiltersOrSelections() && window.scrollY > 70) {
       floatingClearAll.classList.remove('hidden');
     } else {
       floatingClearAll.classList.add('hidden');
