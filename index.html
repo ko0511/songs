@@ -917,9 +917,11 @@ body::before {
       });
     });
 
-    // 監聽滾動事件
-window.addEventListener('scroll', () => {
-  updateFloatingButtonsState(); // 只需呼叫這個函數
+
+// 監聽滾動事件
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 70) {
+      floatingBackToTop.classList.remove('hidden');
 });
 
     // 重試按鈕
@@ -1195,9 +1197,9 @@ window.addEventListener('scroll', () => {
   }
 
   // 更新浮動按鈕狀態
-  /* function updateFloatingButtonsState() {
+    function updateFloatingButtonsState() {
     // 如果有任何篩選條件或已選歌曲且已經滾動，顯示清除全部按鈕
-    if (hasAnyFiltersOrSelections() && window.scrollY > 300) {
+    if (hasAnyFiltersOrSelections() && window.scrollY > 70) {
       floatingClearAll.classList.remove('hidden');
     } else {
       floatingClearAll.classList.add('hidden');
@@ -1209,27 +1211,8 @@ window.addEventListener('scroll', () => {
     } else {
       floatingButtonsContainer.classList.remove('panel-open');
     }
-  } */
+  } 
 
-   // 更新浮動按鈕狀態
-function updateFloatingButtonsState() {
-  const scrollThreshold = 60; // 您希望的滾動距離
-  const isScrolledEnough = window.scrollY > scrollThreshold;
-  const hasFiltersOrSelections = hasAnyFiltersOrSelections();
-
-  // 控制「回到頂部」按鈕
-  if (isScrolledEnough) {
-    floatingBackToTop.classList.remove('hidden');
-  } else {
-    floatingBackToTop.classList.add('hidden');
-  }
-
-  // 控制「清除全部」按鈕
-  if (isScrolledEnough && hasFiltersOrSelections) {
-    floatingClearAll.classList.remove('hidden');
-  } else {
-    floatingClearAll.classList.add('hidden');
-  }
 
   // 根據面板狀態調整浮動按鈕位置
   if (isPanelOpen) {
