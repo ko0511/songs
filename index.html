@@ -1,6 +1,9 @@
+
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
+
 <link rel="shortcut icon" href="./favicon.ico"/>
 <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
@@ -18,14 +21,30 @@
       extend: {
         colors: {
           indigo: {
-            50: "#eef2ff", 100: "#e0e7ff", 200: "#c7d2fe", 300: "#a5b4fc",
-            400: "#818cf8", 500: "#6366f1", 600: "#4f46e5", 700: "#4338ca",
-            800: "#3730a3", 900: "#312e81", 950: "#1e1b4b",
+            50: "#eef2ff",
+            100: "#e0e7ff",
+            200: "#c7d2fe",
+            300: "#a5b4fc",
+            400: "#818cf8",
+            500: "#6366f1",
+            600: "#4f46e5",
+            700: "#4338ca",
+            800: "#3730a3",
+            900: "#312e81",
+            950: "#1e1b4b",
           },
           purple: {
-            50: "#faf5ff", 100: "#f3e8ff", 200: "#e9d5ff", 300: "#d8b4fe",
-            400: "#c084fc", 500: "#a855f7", 600: "#9333ea", 700: "#7942a8",
-            800: "#6b21a8", 900: "#581c87", 950: "#3b0764",
+            50: "#faf5ff",
+            100: "#f3e8ff",
+            200: "#e9d5ff",
+            300: "#d8b4fe",
+            400: "#c084fc",
+            500: "#a855f7",
+            600: "#9333ea",
+            700: "#7942a8",
+            800: "#6b21a8",
+            900: "#581c87",
+            950: "#3b0764",
           },
         }
       }
@@ -33,25 +52,31 @@
   }
 </script>
 <style>
-  html { height: 100%; width: 100%; }
+  html {
+    height: 100%;
+    width: 100%;
+  }
   
   body {
     min-height: 100vh;
     font-family: 'Noto Sans TC', sans-serif;
     position: relative;
     overflow-x: hidden;
-    padding-bottom: 70px;
+    padding-bottom: 70px; /* 為底部固定區域留出空間 */
   }
 
-  body::before { 
-    content: '';
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: linear-gradient(135deg, #e0dbec 0%, #b2a9c9 100%);
-    z-index: -10;
-  }
+body::before { 
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #e0dbec 0%, #b2a9c9 100%);
+  z-index: -10;
+}
 
+  /* 搜尋框紫光效果 */
   .search-glow {
     position: relative;
   }
@@ -59,7 +84,10 @@
   .search-glow::before {
     content: '';
     position: absolute;
-    top: -3px; left: -3px; right: -3px; bottom: -3px;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
     border-radius: 0.5rem;
     background: linear-gradient(45deg, rgba(167, 139, 250, 0), rgba(167, 139, 250, 0.5), rgba(167, 139, 250, 0));
     z-index: -1;
@@ -67,10 +95,17 @@
   }
 
   @keyframes searchGlow {
-    0% { opacity: 0.3; background-position: 0% 50%; }
-    100% { opacity: 0.6; background-position: 100% 50%; }
+    0% {
+      opacity: 0.3;
+      background-position: 0% 50%;
+    }
+    100% {
+      opacity: 0.6;
+      background-position: 100% 50%;
+    }
   }
 
+  /* 標題特效 - 重新設計 - 紫灰漸層 */
   .title-effect {
     letter-spacing: 0.15em;
     margin-left: 0.15em;
@@ -87,24 +122,54 @@
   }
 
   @keyframes titleShimmer {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
   }
 
+  /* 標題光暈效果 - 更柔和 */
   .title-effect::before {
     content: '';
     position: absolute;
-    top: -10px; left: -10px; right: -10px; bottom: -10px;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
     background: radial-gradient(circle at center, rgba(200, 182, 226, 0.15) 0%, rgba(200, 182, 226, 0) 70%);
     z-index: -1;
     border-radius: 50%;
     filter: blur(8px);
   }
 
-  @keyframes spinner { to { transform: rotate(360deg); } }
-  @keyframes bounce { 0%, 100% { transform: translateY(-2px); } 50% { transform: translateY(-6px); } }
-  @keyframes wobble { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+  @keyframes spinner {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(-2px);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+
+  @keyframes wobble {
+    0%, 100% {
+      transform: rotate(-3deg);
+    }
+    50% {
+      transform: rotate(3deg);
+    }
+  }
 
   .empty-icon {
     font-size: 4rem;
@@ -128,52 +193,67 @@
 
   .song-card {
     transition: all 0.3s ease;
-    transform: translateZ(0);
-    will-change: transform, box-shadow;
-    box-shadow: 0 5px 5px -1px rgba(0, 0, 0, 0.15), 0 0px 5px 0px rgba(0, 0, 0, 0.08);
-  }
+  transform: translateZ(0);
+  will-change: transform, box-shadow;
+  box-shadow:
+  0 5px 5px -1px rgba(0, 0, 0, 0.15),   /* 第一層：比 hover 的第一層更輕微 */
+  0 0px 5px 0px rgba(0, 0, 0, 0.08);  /* 第二層：比 hover 的第二層更輕微 */
+}
 
-  .song-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 5px -3px rgba(0, 0, 0, 0.17), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  }
+.song-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+  0 10px 5px -3px rgba(0, 0, 0, 0.17), 
+  0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
 
+  /* 浮動按鈕容器 - 調整位置更高一點 */
   .floating-buttons {
     position: fixed;
-    bottom: 11rem;
+    bottom: 11rem; /* 調整位置更高一點，避免與已選歌曲區域重疊 */
     right: 0.5rem;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
     z-index: 60;
-    transition: bottom 0.3s ease;
+    transition: bottom 0.3s ease; /* 添加過渡效果 */
   }
 
-  .floating-buttons.panel-open { bottom: 23rem; }
+  /* 當面板打開時，浮動按鈕位置更高 */
+  .floating-buttons.panel-open {
+    bottom: 23rem; /* 面板打開時的位置 */
+  }
 
+  /* 浮動按鈕基本樣式 - 增加透明度 */
   .floating-button {
-    width: 3.5rem; height: 3.5rem;
+    width: 3.5rem;
+    height: 3.5rem;
     border-radius: 9999px;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     transition: all 0.3s ease;
-    opacity: 0.7;
+    opacity: 0.7; /* 增加透明度 */
     font-size: 0.875rem;
     font-weight: 500;
   }
 
   .floating-button:hover {
     transform: translateY(-2px);
-    opacity: 0.9;
+    opacity: 0.9; /* 懸停時的透明度 */
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   }
 
-  .back-to-top { background-color: rgba(79, 70, 229, 0.75); color: white; }
+  /* 置頂按鈕 */
+  .back-to-top {
+    background-color: rgba(79, 70, 229, 0.75); /* 更透明 */
+    color: white;
+  }
 
+  /* 清除全部按鈕 */
   .clear-all-btn {
-    background-color: rgba(239, 68, 68, 0.75);
+    background-color: rgba(239, 68, 68, 0.75); /* 更透明 */
     color: white;
     display: flex;
     flex-direction: column;
@@ -183,6 +263,7 @@
     padding: 0.25rem;
   }
 
+  /* 隱藏按鈕 */
   .floating-button.hidden {
     opacity: 0;
     transform: translateY(1rem);
@@ -191,7 +272,8 @@
 
   .toast-notification {
     position: fixed;
-    bottom: 1rem; left: 50%;
+    bottom: 1rem;
+    left: 50%;
     transform: translateX(-50%);
     background-color: rgba(0, 0, 0, 0.8);
     color: white;
@@ -213,23 +295,30 @@
   }
 
   .loading-spinner {
-    height: 2.5rem; width: 2.5rem;
+    height: 2.5rem;
+    width: 2.5rem;
     border-radius: 9999px;
     border: 4px solid #e5e7eb;
     border-top-color: #4f46e5;
     animation: spinner 0.6s linear infinite;
   }
 
-  .clear-button { transition: all 0.3s ease; }
+  /* 清除按鈕樣式 */
+  .clear-button {
+    transition: all 0.3s ease;
+  }
+
   .clear-button.disabled {
     opacity: 0.5;
     background-color: rgba(239, 68, 68, 0.1);
     color: rgba(239, 68, 68, 0.5);
   }
   
+  /* 搜尋框清除按鈕 */
   .search-clear-button {
     position: absolute;
-    right: 2.5rem; top: 50%;
+    right: 2.5rem;
+    top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
     padding: 0.25rem;
@@ -241,11 +330,22 @@
     transition: all 0.2s ease;
   }
   
-  .search-clear-button:hover { background-color: rgba(156, 163, 175, 0.4); }
-  .search-clear-button.hidden { opacity: 0; visibility: hidden; }
+  .search-clear-button:hover {
+    background-color: rgba(156, 163, 175, 0.4);
+  }
+  
+  .search-clear-button.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
 
-  #app { position: relative; z-index: 1; }
+  /* 確保主容器不影響背景 */
+  #app {
+    position: relative;
+    z-index: 1;
+  }
 
+  /* 選中的分類按鈕樣式 */
   .category-button.selected {
     background-color: #a482c7 !important;
     color: white !important;
@@ -258,10 +358,24 @@
     color: white;
   }
 
-  .filter-tag { background-color: #e9d5ff; color: #6b21a8; }
-  .selected-categories-container { background-color: #f1ebfc; }
-  .empty-categories-text { color: #9333ea; opacity: 0.6; }
+  /* 選中的分類標籤樣式 */
+  .filter-tag {
+    background-color: #e9d5ff;
+    color: #6b21a8;
+  }
+  
+  /* 已選分類區域樣式 */
+  .selected-categories-container {
+    background-color: #f1ebfc;
+  }
+  
+  /* 空白提示文字樣式 */
+  .empty-categories-text {
+    color: #9333ea;
+    opacity: 0.6;
+  }
 
+  /* 選中歌曲卡片樣式 */
   .song-card.selected {
     border-color: #9333ea;
     background-color: #faf5ff;
@@ -270,8 +384,10 @@
   .song-card.selected::after {
     content: '✓';
     position: absolute;
-    top: 0.5rem; right: 0.5rem;
-    width: 1.5rem; height: 1.5rem;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
     background-color: #9333ea;
     border-radius: 50%;
     display: flex;
@@ -282,31 +398,62 @@
     font-weight: bold;
   }
 
-  .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-  .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
-  .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  /* 自定義滾動條 */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
   
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+  
+  /* 底部歌曲明細展開面板 */
   .selected-songs-panel {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
   }
   
-  .selected-songs-panel.open { max-height: 300px; }
-  .selected-songs-list { max-height: 200px; overflow-y: auto; }
-  .toggle-panel-btn { transition: transform 0.3s ease; }
-  .toggle-panel-btn.open { transform: rotate(180deg); }
+  .selected-songs-panel.open {
+    max-height: 300px;
+  }
   
+  .selected-songs-list {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  .toggle-panel-btn {
+    transition: transform 0.3s ease;
+  }
+  
+  .toggle-panel-btn.open {
+    transform: rotate(180deg);
+  }
+  
+  /* 底部控制欄 */
   .bottom-control-bar {
     position: fixed;
-    bottom: 0; left: 0; right: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     background-color: white;
     border-top: 1px solid #e5e7eb;
     box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
     z-index: 50;
   }
   
+  /* 已選歌曲項目動畫 */
   .selected-song-item {
     animation: fadeIn 0.3s ease;
     transform: translateZ(0);
@@ -322,16 +469,20 @@
     box-shadow: 0 6px 8px -2px rgba(0, 0, 0, 0.1), 0 3px 6px -3px rgba(0, 0, 0, 0.05);
   }
   
+  /* 已選歌曲項目左側彩色條紋 */
   .selected-song-item::before {
     content: '';
     position: absolute;
-    left: 0; top: 0; bottom: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
     width: 4px;
-    background-color: #9333ea; /* Default color for selected item border */
   }
   
+  /* 已選歌曲項目刪除按鈕 */
   .remove-btn {
-    width: 28px; height: 28px;
+    width: 28px;
+    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -347,1082 +498,1279 @@
     transform: scale(1.1);
   }
   
-  .remove-btn svg { width: 16px; height: 16px; }
+  .remove-btn svg {
+    width: 16px;
+    height: 16px;
+  }
   
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 </style>
 
-<!-- Google tag (gtag.js) -->
+
+  
+  <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JZ56RZ5546"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
+
   gtag('config', 'G-JZ56RZ5546');
 </script>
+  
 </head>
   
 <body>
+
   <div id="app" class="container mx-auto px-4 py-6 sm:py-8">
-    <header class="text-center mb-6 sm:mb-10">
-      <h1 class="text-3xl sm:text-4xl font-bold mb-1 sm:mb-2 title-effect">我的歌曲庫</h1>
-      <p class="text-gray-600 text-base sm:text-lg subtitle">✨願我的歌聲在你心裡留一盞燈✨</p>
-    </header>
+  <header class="text-center mb-6 sm:mb-10">
+    <h1 class="text-3xl sm:text-4xl font-bold mb-1 sm:mb-2 title-effect">我的歌曲庫</h1>
+    <p class="text-gray-600 text-base sm:text-lg subtitle">✨願我的歌聲在你心裡留一盞燈✨</p>
+  </header>
 
-    <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8 backdrop-blur-sm bg-opacity-90">
-      <!-- Search bar -->
-      <div class="mb-4 sm:mb-6">
-        <div class="relative search-glow">
-          <input
-            id="search-input"
-            type="text"
-            placeholder="搜尋歌曲、歌手或語言..."
-            class="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-700 text-sm sm:text-base"
-          />
-          <button id="search-clear" class="search-clear-button hidden" aria-label="清除搜尋">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-          <svg class="h-4 w-4 sm:h-5 sm:w-5 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+  <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8 backdrop-blur-sm bg-opacity-90">
+    <!-- Search bar -->
+    <div class="mb-4 sm:mb-6">
+      <div class="relative search-glow">
+        <input
+          id="search-input"
+          type="text"
+          placeholder="搜尋歌曲、歌手或語言..."
+          class="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-700 text-sm sm:text-base"
+        />
+        <!-- 清除按鈕 -->
+        <button id="search-clear" class="search-clear-button hidden" aria-label="清除搜尋">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
-        </div>
+        </button>
+        <!-- 搜尋圖標 -->
+        <svg class="h-4 w-4 sm:h-5 sm:w-5 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
       </div>
+    </div>
 
-      <!-- Category filters -->
-      <div class="mb-4 sm:mb-5">
-        <div class="flex justify-between items-center mb-3">
-          <h3 class="text-lg font-semibold text-gray-700">分類</h3>
-        </div>
-
-        <div id="category-filter" class="flex gap-2 sm:gap-2.5 flex-wrap hidden">
-          <!-- Category buttons will be inserted here -->
-        </div>
-
-        <!-- Active filters -->
-        <div id="active-filters" class="flex items-center mt-3">
-          <div class="flex-grow px-3 py-2 rounded-lg selected-categories-container">
-            <div id="selected-categories" class="flex flex-wrap gap-1">
-              <!-- Selected category tags will be inserted here -->
-            </div>
-          </div>
-          <button
-            id="clear-categories"
-            class="clear-button ml-2 text-sm text-red-600 hover:text-red-800 font-medium px-3 py-1 bg-red-50 rounded-lg hover:bg-red-100 transition-colors disabled"
-          >
-            清除分類
-          </button>
-        </div>
-      </div>
-
-      <!-- Language filters -->
-      <div id="language-filter" class="hidden"></div>
-
+    <!-- Category filters -->
+    <div class="mb-4 sm:mb-5">
       <div class="flex justify-between items-center mb-3">
-        <div class="text-gray-600">
-          <span id="song-count" class="font-medium">0</span> 首歌曲
+        <h3 class="text-lg font-semibold text-gray-700">分類</h3>
+      </div>
+
+      <div id="category-filter" class="flex gap-2 sm:gap-2.5 flex-wrap hidden">
+        <!-- Category buttons will be inserted here -->
+      </div>
+
+      <!-- Active filters -->
+      <div id="active-filters" class="flex items-center mt-3">
+        <div class="flex-grow px-3 py-2 rounded-lg selected-categories-container">
+          <div id="selected-categories" class="flex flex-wrap gap-1">
+            <!-- Selected category tags will be inserted here -->
+          </div>
         </div>
-      </div>
-
-      <!-- Loading state -->
-      <div id="loading" class="flex justify-center py-10">
-        <div class="loading-spinner"></div>
-      </div>
-
-      <!-- Error state -->
-      <div id="error" class="text-center py-10 hidden">
-        <div class="h-16 w-16 mx-auto text-red-400 mb-4">⚠️</div>
-        <p class="text-gray-600 text-lg">無法獲取歌曲數據</p>
-        <p class="text-gray-500 mt-2">正在載入本地數據...</p>
         <button
-          id="retry-button"
-          class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+          id="clear-categories"
+          class="clear-button ml-2 text-sm text-red-600 hover:text-red-800 font-medium px-3 py-1 bg-red-50 rounded-lg hover:bg-red-100 transition-colors disabled"
         >
-          重試
+          清除分類
         </button>
       </div>
+    </div>
 
-      <!-- Empty state -->
-      <div id="empty-state" class="text-center py-10 hidden">
-        <div class="empty-icon mb-4">😕</div>
-        <p class="text-gray-600 text-lg">沒有找到符合的歌曲</p>
-      </div>
-
-      <!-- Songs grid -->
-      <div id="songs-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 custom-scrollbar">
-        <!-- Song cards will be inserted here -->
+    <!-- Language filters -->
+    <div class="flex flex-col md:flex-row md:items-center gap-4 mb-4">
+      <div id="language-filter" class="flex gap-1.5 sm:gap-2 flex-wrap">
+        <!-- Language buttons will be inserted here -->
       </div>
     </div>
 
-    <!-- 浮動按鈕區域 -->
-    <div id="floating-buttons" class="floating-buttons">
-      <button id="floating-clear-all" class="floating-button clear-all-btn hidden" aria-label="清除全部">
-        <span>清除</span>
-        <span>全部</span>
-      </button>
-      
-      <button id="floating-back-to-top" class="floating-button back-to-top hidden" aria-label="回到頂部">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-        </svg>
+    <div class="flex justify-between items-center mb-3">
+      <div class="text-gray-600">
+        <span id="song-count" class="font-medium">0</span> 首歌曲
+      </div>
+    </div>
+
+    <!-- Loading state -->
+    <div id="loading" class="flex justify-center py-10">
+      <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Error state -->
+    <div id="error" class="text-center py-10 hidden">
+      <div class="h-16 w-16 mx-auto text-red-400 mb-4">⚠️</div>
+      <p class="text-gray-600 text-lg">無法獲取歌曲數據</p>
+      <p class="text-gray-500 mt-2">正在載入本地數據...</p>
+      <button
+        id="retry-button"
+        class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+      >
+        重試
       </button>
     </div>
 
-    <!-- Toast notification -->
-    <div id="toast-notification" class="toast-notification hidden">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+    <!-- Empty state -->
+    <div id="empty-state" class="text-center py-10 hidden">
+      <div class="empty-icon mb-4">😕</div>
+      <p class="text-gray-600 text-lg">沒有找到符合的歌曲</p>
+    </div>
+
+    <!-- Songs grid -->
+    <div id="songs-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 custom-scrollbar">
+      <!-- Song cards will be inserted here -->
+    </div>
+  </div>
+
+  <!-- 浮動按鈕區域 -->
+  <div id="floating-buttons" class="floating-buttons">
+    <!-- 清除全部按鈕 - 文字分成兩行 -->
+    <button id="floating-clear-all" class="floating-button clear-all-btn hidden" aria-label="清除全部">
+      <span>清除</span>
+      <span>全部</span>
+    </button>
+    
+    <!-- 置頂按鈕 -->
+    <button id="floating-back-to-top" class="floating-button back-to-top hidden" aria-label="回到頂部">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
       </svg>
-      <span>已複製到剪貼簿</span>
-    </div>
+    </button>
+  </div>
 
-    <!-- 底部控制欄 -->
-    <div class="bottom-control-bar">
-      <!-- 已選歌曲明細面板 -->
-      <div id="selected-songs-panel" class="selected-songs-panel border-t border-gray-200">
-        <div class="container mx-auto max-w-6xl px-4 py-3">
-          <div class="bg-purple-100 rounded-lg p-3">
-            <div class="flex justify-between items-center mb-2">
-              <h3 class="font-medium text-purple-800">已選歌曲明細</h3>
-              <span class="text-sm text-purple-600">共 <span id="panel-song-count">0</span> 首</span>
-            </div>
-            <div id="selected-songs-list" class="selected-songs-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 custom-scrollbar pr-2">
-              <div class="text-center text-gray-500 py-4 col-span-full" id="panel-empty-message">
-                尚未選擇任何歌曲
-              </div>
+  <!-- Toast notification -->
+  <div id="toast-notification" class="toast-notification hidden">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+    </svg>
+    <span>已複製到剪貼簿</span>
+  </div>
+
+  <!-- 底部控制欄 -->
+  <div class="bottom-control-bar">
+    <!-- 已選歌曲明細面板 -->
+    <div id="selected-songs-panel" class="selected-songs-panel border-t border-gray-200">
+      <div class="container mx-auto max-w-6xl px-4 py-3">
+        <div class="bg-purple-100 rounded-lg p-3">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="font-medium text-purple-800">已選歌曲明細</h3>
+            <span class="text-sm text-purple-600">共 <span id="panel-song-count">0</span> 首</span>
+          </div>
+          <div id="selected-songs-list" class="selected-songs-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 custom-scrollbar pr-2">
+            <!-- 已選歌曲將由 JavaScript 動態生成 -->
+            <div class="text-center text-gray-500 py-4 col-span-full" id="panel-empty-message">
+              尚未選擇任何歌曲
             </div>
           </div>
         </div>
       </div>
-      
-      <!-- 底部控制欄 -->
-      <div class="container mx-auto max-w-6xl px-4 py-4">
-        <div class="flex flex-col sm:flex-row justify-around items-center gap-4"> <!-- Changed justify-between to justify-around -->
-          <div class="flex items-center">
-            <span class="text-gray-700 font-medium">已選擇 <span id="selected-count">0</span> 首歌曲</span>
-          </div>
-          <div class="flex items-center gap-4">
-            <button id="toggle-panel" class="flex items-center gap-1 px-4 py-2 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-lg font-medium">
-              <span>查看已選歌曲</span>
-              <svg id="toggle-panel-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 toggle-panel-btn" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-              </svg>
-            </button>
-            <button id="copy-songs" class="px-6 py-2 bg-purple-400 hover:bg-purple-500 text-white rounded-lg font-medium shadow-md flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-              </svg>
-              複製已選歌曲
-            </button>
-            <button 
-              id="clear-selection" 
-              class="px-4 py-2 bg-red-400 text-white rounded-lg font-medium shadow-md flex items-center gap-2 hover:bg-red-500 disabled:opacity-50 disabled:bg-red-100 disabled:text-red-300"
-            >
-              清除選擇
-            </button>
-          </div>
+    </div>
+    
+    <!-- 底部控制欄 -->
+    <div class="container mx-auto max-w-6xl px-4 py-4">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="flex items-center">
+          <span class="text-gray-700 font-medium">已選擇 <span id="selected-count">0</span> 首歌曲</span>
+          <button id="clear-selection" class="ml-2 text-sm text-purple-600 hover:text-purple-800 font-medium">清除選擇</button>
+        </div>
+        <div class="flex items-center gap-4">
+          <button id="toggle-panel" class="flex items-center gap-1 px-4 py-2 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-lg font-medium">
+            <span>查看已選歌曲</span>
+            <svg id="toggle-panel-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 toggle-panel-btn" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+            </svg>
+          </button>
+          <button id="copy-songs" class="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium shadow-md flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+            </svg>
+            複製已選歌曲
+          </button>
         </div>
       </div>
     </div>
   </div>
+</div>
 
 <script>
-  // Application State Management
-  class SongLibraryApp {
-    constructor() {
-      this.state = {
-        allSongs: [],
-        filteredSongs: [],
-        // languages: new Set(), // Removed language state
-        categories: new Set(),
-        categoryCounts: {},
-        categoryOrder: {},
-        selectedCategories: new Set(),
-        currentLanguageFilter: 'all', // Keep for internal filtering if needed, but not exposed in UI
-        selectedSongs: new Set(),
-        isPanelOpen: false,
-        retryCount: 0
-      };
-      
-      this.config = {
-        MAX_RETRIES: 3,
-        SHEET_ID: '1z-kl4dUioRrhJaq82O283991VPtg2PfXqx4eN5fQ9-8',
-        API_TIMEOUT: 15000,
-        SCROLL_THRESHOLD: 70
-      };
-      
-      this.fieldMappings = {
-        title: ['歌名', 'title', 'Song', 'Title', '歌曲名稱', '歌曲', 'song_title', 'songTitle'],
-        artist: ['歌手', 'artist', 'Artist', '演唱者', '歌手名稱', 'singer', 'performer'],
-        language: ['語言', 'language', 'Language', '語系', 'lang', 'Language Type'], // Keep for data processing, but not for UI filter
-        category: ['分類', 'category', 'Category', '類別', '分類標籤', 'tags', 'genre'],
-        notes: ['備註', 'notes', 'Notes', '註解', '說明', 'description', 'remark', 'comment'],
-        categoryOrder: ['分類項目', '分類項目', 'CategoryItem', 'Category Item', '分類順序', 'category_order']
-      };
-      
-      this.elements = this.initializeElements();
-      this.fallbackData = this.getFallbackData();
-      
-      this.init();
+  // 全局變量
+  let allSongs = [];
+  let filteredSongs = [];
+  let languages = new Set();
+  let categories = new Set();
+  let categoryCounts = {};
+  let categoryOrder = {};
+  let selectedCategories = new Set();
+  let currentLanguageFilter = 'all';
+  let selectedSongs = new Set();
+  let retryCount = 0;
+  const MAX_RETRIES = 3;
+  let isPanelOpen = false;
+
+  // 本地備用數據
+  const fallbackSongs = [
+    {
+      id: 1,
+      title: "愛你",
+      artist: "陳芳語",
+      language: "華語",
+      category: "流行,抒情",
+      notes: "經典情歌"
+    },
+    {
+      id: 2,
+      title: "小幸運",
+      artist: "田馥甄",
+      language: "華語",
+      category: "流行,抒情,電影",
+      notes: "電影《我的少女時代》主題曲"
+    },
+    {
+      id: 3,
+      title: "告白氣球",
+      artist: "周杰倫",
+      language: "華語",
+      category: "流行,抒情",
+      notes: "甜蜜情歌"
+    },
+    {
+      id: 4,
+      title: "Dynamite",
+      artist: "BTS",
+      language: "英語",
+      category: "流行,舞曲",
+      notes: "充滿活力的歌曲"
+    },
+    {
+      id: 5,
+      title: "淋雨一直走",
+      artist: "張韶涵",
+      language: "華語",
+      category: "流行,勵志",
+      notes: "激勵人心的歌曲"
+    },
+    {
+      id: 6,
+      title: "Butter",
+      artist: "BTS",
+      language: "英語",
+      category: "流行,舞曲",
+      notes: "節奏感強"
+    },
+    {
+      id: 7,
+      title: "漂向北方",
+      artist: "黃明志 (feat. 王力宏)",
+      language: "華語",
+      category: "流行,饒舌",
+      notes: "描述異鄉人的心情"
+    },
+    {
+      id: 8,
+      title: "光年之外",
+      artist: "鄧紫棋",
+      language: "華語",
+      category: "流行,抒情",
+      notes: "電影《太空潛航者》主題曲"
+    },
+    {
+      id: 9,
+      title: "Bad Guy",
+      artist: "Billie Eilish",
+      language: "英語",
+      category: "流行,另類",
+      notes: "獨特風格"
+    },
+    {
+      id: 10,
+      title: "修煉愛情",
+      artist: "林俊傑",
+      language: "華語",
+      category: "流行,抒情",
+      notes: "經典情歌"
+    },
+    {
+      id: 11,
+      title: "Blinding Lights",
+      artist: "The Weeknd",
+      language: "英語",
+      category: "流行,舞曲",
+      notes: "80年代復古風格"
+    },
+    {
+      id: 12,
+      title: "學貓叫",
+      artist: "小潘潘 & 小峰峰",
+      language: "華語",
+      category: "流行,搞笑",
+      notes: "輕鬆有趣"
+    },
+    {
+      id: 13,
+      title: "Señorita",
+      artist: "Shawn Mendes & Camila Cabello",
+      language: "英語",
+      category: "流行,拉丁",
+      notes: "熱情洋溢"
+    },
+    {
+      id: 14,
+      title: "說好不哭",
+      artist: "周杰倫",
+      language: "華語",
+      category: "流行,抒情",
+      notes: "感人情歌"
+    },
+    {
+      id: 15,
+      title: "Shape of You",
+      artist: "Ed Sheeran",
+      language: "英語",
+      category: "流行,R&B",
+      notes: "節奏感強"
+    },
+    {
+      id: 16,
+      title: "夜空中最亮的星",
+      artist: "逃跑計劃",
+      language: "華語",
+      category: "搖滾,抒情",
+      notes: "充滿希望"
     }
+  ];
 
-    initializeElements() {
-      const getElement = (id) => document.getElementById(id);
-      
-      return {
-        searchInput: getElement('search-input'),
-        searchClear: getElement('search-clear'),
-        categoryFilter: getElement('category-filter'),
-        selectedCategoriesContainer: getElement('selected-categories'),
-        // languageFilter: getElement('language-filter'), // Removed language filter element
-        songCount: getElement('song-count'),
-        loading: getElement('loading'),
-        error: getElement('error'),
-        retryButton: getElement('retry-button'),
-        emptyState: getElement('empty-state'),
-        songsGrid: getElement('songs-grid'),
-        clearCategoriesButton: getElement('clear-categories'),
-        toastNotification: getElement('toast-notification'),
-        floatingButtonsContainer: getElement('floating-buttons'),
-        floatingBackToTop: getElement('floating-back-to-top'),
-        floatingClearAll: getElement('floating-clear-all'),
-        selectedSongsPanel: getElement('selected-songs-panel'),
-        togglePanelBtn: getElement('toggle-panel'),
-        togglePanelIcon: getElement('toggle-panel-icon'),
-        selectedSongsList: getElement('selected-songs-list'),
-        panelSongCount: getElement('panel-song-count'),
-        panelEmptyMessage: getElement('panel-empty-message'),
-        selectedCount: getElement('selected-count'),
-        clearSelectionBtn: getElement('clear-selection'),
-        copySongsBtn: getElement('copy-songs')
-      };
-    }
+  // DOM 元素
+  const searchInput = document.getElementById('search-input');
+  const searchClear = document.getElementById('search-clear');
+  const categoryFilter = document.getElementById('category-filter');
+  const activeFilters = document.getElementById('active-filters');
+  const selectedCategoriesContainer = document.getElementById('selected-categories');
+  const languageFilter = document.getElementById('language-filter');
+  const songCount = document.getElementById('song-count');
+  const loading = document.getElementById('loading');
+  const error = document.getElementById('error');
+  const retryButton = document.getElementById('retry-button');
+  const emptyState = document.getElementById('empty-state');
+  const songsGrid = document.getElementById('songs-grid');
+  const clearCategoriesButton = document.getElementById('clear-categories'); 
+  const toastNotification = document.getElementById('toast-notification');
+  
+  // 浮動按鈕元素
+  const floatingButtonsContainer = document.getElementById('floating-buttons');
+  const floatingBackToTop = document.getElementById('floating-back-to-top');
+  const floatingClearAll = document.getElementById('floating-clear-all'); // Changed ID
+  
+  // 底部面板元素
+  const selectedSongsPanel = document.getElementById('selected-songs-panel');
+  const togglePanelBtn = document.getElementById('toggle-panel');
+  const togglePanelIcon = document.getElementById('toggle-panel-icon');
+  const selectedSongsList = document.getElementById('selected-songs-list');
+  const panelSongCount = document.getElementById('panel-song-count');
+  const panelEmptyMessage = document.getElementById('panel-empty-message');
+  const selectedCount = document.getElementById('selected-count');
+  const clearSelectionBtn = document.getElementById('clear-selection');
+  const copySongsBtn = document.getElementById('copy-songs');
 
-    getFallbackData() {
-      return [
-        { id: 1, title: "愛你", artist: "陳芳語", language: "華語", category: "流行,抒情", notes: "經典情歌" },
-        { id: 2, title: "小幸運", artist: "田馥甄", language: "華語", category: "流行,抒情,電影", notes: "電影《我的少女時代》主題曲" },
-        { id: 3, title: "告白氣球", artist: "周杰倫", language: "華語", category: "流行,抒情", notes: "甜蜜情歌" },
-        { id: 4, title: "Dynamite", artist: "BTS", language: "英語", category: "流行,舞曲", notes: "充滿活力的歌曲" },
-        { id: 5, title: "淋雨一直走", artist: "張韶涵", language: "華語", category: "流行,勵志", notes: "激勵人心的歌曲" },
-        { id: 6, title: "Butter", artist: "BTS", language: "英語", category: "流行,舞曲", notes: "節奏感強" },
-        { id: 7, title: "漂向北方", artist: "黃明志 (feat. 王力宏)", language: "華語", category: "流行,饒舌", notes: "描述異鄉人的心情" },
-        { id: 8, title: "光年之外", artist: "鄧紫棋", language: "華語", category: "流行,抒情", notes: "電影《太空潛航者》主題曲" },
-        { id: 9, title: "Bad Guy", artist: "Billie Eilish", language: "英語", category: "流行,另類", notes: "獨特風格" },
-        { id: 10, title: "修煉愛情", artist: "林俊傑", language: "華語", category: "流行,抒情", notes: "經典情歌" },
-        { id: 11, title: "Blinding Lights", artist: "The Weeknd", language: "英語", category: "流行,舞曲", notes: "80年代復古風格" },
-        { id: 12, title: "學貓叫", artist: "小潘潘 & 小峰峰", language: "華語", category: "流行,搞笑", notes: "輕鬆有趣" },
-        { id: 13, title: "Señorita", artist: "Shawn Mendes & Camila Cabello", language: "英語", category: "流行,拉丁", notes: "熱情洋溢" },
-        { id: 14, title: "說好不哭", artist: "周杰倫", language: "華語", category: "流行,抒情", notes: "感人情歌" },
-        { id: 15, title: "Shape of You", artist: "Ed Sheeran", language: "英語", category: "流行,R&B", notes: "節奏感強" },
-        { id: 16, title: "夜空中最亮的星", artist: "逃跑計劃", language: "華語", category: "搖滾,抒情", notes: "充滿希望" }
-      ];
-    }
+  // 初始化
+  document.addEventListener('DOMContentLoaded', () => {
+    fetchSheetData();
+    setupEventListeners();
+  });
 
-    init() {
-      this.setupEventListeners();
-      this.fetchSheetData();
-    }
 
-    setupEventListeners() {
-      // Search functionality
-      this.elements.searchInput.addEventListener('input', () => {
-        this.filterSongs();
-        this.toggleSearchClearButton();
-      });
-      
-      this.elements.searchClear.addEventListener('click', () => {
-        this.elements.searchInput.value = '';
-        this.filterSongs();
-        this.toggleSearchClearButton();
-        this.elements.searchInput.focus();
-      });
 
-      // Clear buttons
-      this.elements.clearCategoriesButton.addEventListener('click', () => this.clearCategories());
-      this.elements.floatingClearAll.addEventListener('click', () => this.resetAllFiltersAndSelections());
-
-      // Floating buttons
-      this.elements.floatingBackToTop.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-
-      // Scroll events
-      window.addEventListener('scroll', () => this.updateFloatingButtonsState());
-
-      // Retry button
-      this.elements.retryButton.addEventListener('click', () => {
-        this.state.retryCount = 0;
-        this.fetchSheetData();
-      });
-      
-      // Panel controls
-      this.elements.togglePanelBtn.addEventListener('click', () => this.togglePanel());
-      this.elements.clearSelectionBtn.addEventListener('click', () => this.clearSelection());
-      this.elements.copySongsBtn.addEventListener('click', () => this.copySelectedSongsToClipboard());
-    }
-
-    // Enhanced field value extraction with multiple fallbacks
-    getFieldValue(row, fieldType) {
-      const possibleFields = this.fieldMappings[fieldType] || [];
-      
-      for (const field of possibleFields) {
-        if (row[field] !== undefined && row[field] !== null && row[field] !== '') {
-          return String(row[field]).trim();
-        }
-      }
-      
-      return '';
-    }
-
-    // Enhanced data validation
-    validateRowData(row) {
-      const title = this.getFieldValue(row, 'title');
-      const artist = this.getFieldValue(row, 'artist');
-      
-      // At minimum, we need either a title or artist
-      return title || artist;
-    }
-
-    // Debug function to log spreadsheet structure
-    debugSpreadsheetStructure(data) {
-      if (data.length > 0) {
-        console.log('=== 試算表結構分析 ===');
-        console.log('總行數:', data.length);
-        console.log('第一行欄位:', Object.keys(data[0]));
-        
-        // Show first few rows for debugging
-        console.log('前3行數據:');
-        data.slice(0, 3).forEach((row, index) => {
-          console.log(`第${index + 1}行:`, row);
-        });
-        
-        // Check field mappings
-        console.log('=== 欄位對應檢查 ===');
-        Object.keys(this.fieldMappings).forEach(fieldType => {
-          const value = this.getFieldValue(data[0], fieldType);
-          console.log(`${fieldType}:`, value || '未找到');
-        });
-      }
-    }
-
-    async fetchSheetData() {
-      this.showLoading();
-      this.hideError();
-
-      try {
-        console.log('開始獲取試算表數據...');
-        const apiUrl = `https://opensheet.elk.sh/${this.config.SHEET_ID}/sheet1`;
-        
-        // Add headers to improve compatibility
-        const fetchOptions = {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }
-        };
-        
-        const fetchPromise = fetch(apiUrl, fetchOptions);
-        const timeoutPromise = new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('請求超時')), this.config.API_TIMEOUT)
-        );
-
-        const response = await Promise.race([fetchPromise, timeoutPromise]);
-        
-        if (!response.ok) {
-          throw new Error(`網路回應錯誤: ${response.status} ${response.statusText}`);
-        }
-
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-          throw new Error('回應格式不是 JSON');
-        }
-
-        const data = await response.json();
-        
-        // Enhanced data validation
-        if (!Array.isArray(data)) {
-          throw new Error('數據格式錯誤：不是陣列格式');
-        }
-        
-        if (data.length === 0) {
-          throw new Error('試算表為空');
-        }
-        
-        // Debug the spreadsheet structure
-        this.debugSpreadsheetStructure(data);
-        
-        // Filter out invalid rows
-        const validRows = data.filter(row => this.validateRowData(row));
-        
-        if (validRows.length === 0) {
-          throw new Error('沒有找到有效的歌曲數據');
-        }
-        
-        console.log(`成功獲取 ${validRows.length} 首有效歌曲數據`);
-        
-        this.processSheetData(validRows);
-        this.hideLoading();
-        
-      } catch (err) {
-        console.error('獲取試算表數據時發生錯誤:', err);
-        this.state.retryCount++;
-        
-        if (this.state.retryCount < this.config.MAX_RETRIES) {
-          console.log(`重試中... 第 ${this.state.retryCount} 次，共 ${this.config.MAX_RETRIES} 次`);
-          setTimeout(() => this.fetchSheetData(), 2000 * this.state.retryCount);
-        } else {
-          console.log('多次重試失敗，使用本地備用數據');
-          this.hideLoading();
-          this.showError();
-          setTimeout(() => this.processFallbackData(), 1500);
-        }
-      }
-    }
-
-    processFallbackData() {
-      console.log('使用本地備用數據');
-      this.processSheetData(this.fallbackData);
-      this.hideError();
-    }
-
-    processSheetData(data) {
-      console.log('開始處理試算表數據...');
-      
-      // Reset state
-      this.state.allSongs = [];
-      // this.state.languages = new Set(); // Removed language state reset
-      this.state.categories = new Set();
-      this.state.categoryCounts = {};
-      this.state.categoryOrder = {};
-      this.state.selectedCategories.clear();
-      this.state.selectedSongs.clear();
-
-      // First pass: Extract category order from any available field
-      let orderIndex = 0;
-      data.forEach((row, index) => {
-        const categoryOrderValue = this.getFieldValue(row, 'categoryOrder');
-        if (categoryOrderValue && this.state.categoryOrder[categoryOrderValue] === undefined) {
-          this.state.categoryOrder[categoryOrderValue] = orderIndex++;
-          this.state.categories.add(categoryOrderValue);
-        }
-      });
-
-      // Second pass: Process song data
-      this.state.allSongs = data.map((row, index) => {
-        const song = {
-          id: index + 1,
-          title: this.getFieldValue(row, 'title'),
-          artist: this.getFieldValue(row, 'artist'),
-          language: this.getFieldValue(row, 'language'), // Keep language for internal filtering/data, but not for UI
-          category: this.getFieldValue(row, 'category'),
-          notes: this.getFieldValue(row, 'notes'),
-          categories: []
-        };
-
-        // Process language (no longer adding to state.languages for UI)
-        // if (song.language) {
-        //   this.state.languages.add(song.language);
-        // }
-
-        // Process categories
-        if (song.category) {
-          const categoryList = song.category
-            .split(/[,，、]/) // Support multiple separators
-            .map(cat => cat.trim())
-            .filter(cat => cat.length > 0);
-          
-          song.categories = categoryList;
-
-          categoryList.forEach(cat => {
-            this.state.categories.add(cat);
-            this.state.categoryCounts[cat] = (this.state.categoryCounts[cat] || 0) + 1;
-
-            // Assign order if not already set
-            if (this.state.categoryOrder[cat] === undefined) {
-              this.state.categoryOrder[cat] = 1000 + orderIndex++;
-            }
-          });
-        }
-
-        return song;
-      }).filter(song => song.title || song.artist); // Filter out completely empty songs
-
-      this.state.filteredSongs = [...this.state.allSongs];
-      
-      console.log(`處理完成: ${this.state.allSongs.length} 首歌曲`);
-      // console.log(`語言: ${Array.from(this.state.languages).join(', ')}`); // Removed language log
-      console.log(`分類: ${Array.from(this.state.categories).join(', ')}`);
-      
-      this.updateUI();
-      this.elements.categoryFilter.classList.remove('hidden');
-    }
-
-    filterSongs() {
-      const searchTerm = this.elements.searchInput.value.toLowerCase().trim();
-      
-      this.state.filteredSongs = this.state.allSongs.filter(song => {
-        // Language filter (still applies if currentLanguageFilter is set, but UI for it is removed)
-        if (this.state.currentLanguageFilter !== 'all' && song.language !== this.state.currentLanguageFilter) {
-          return false;
-        }
-
-        // Category filter - ALL selected categories must be present
-        if (this.state.selectedCategories.size > 0) {
-          for (const category of this.state.selectedCategories) {
-            if (!song.categories.includes(category)) {
-              return false;
-            }
-          }
-        }
-
-        // Search filter - search in all text fields
-        if (searchTerm) {
-          const searchFields = [
-            song.title,
-            song.artist,
-            song.language,
-            song.category,
-            song.notes,
-            ...song.categories
-          ].filter(field => field); // Remove empty fields
-          
-          return searchFields.some(field => 
-            field.toLowerCase().includes(searchTerm)
-          );
-        }
-
-        return true;
-      });
-
-      this.updateCategoryCounts();
-      this.updateSongsUI();
-      this.updateFloatingButtonsState();
-    }
-
-    updateCategoryCounts() {
-      const newCounts = {};
-
-      this.state.filteredSongs.forEach(song => {
-        if (song.categories && song.categories.length > 0) {
-          song.categories.forEach(cat => {
-            if (cat) {
-              newCounts[cat] = (newCounts[cat] || 0) + 1;
-            }
-          });
-        }
-      });
-
-      this.state.categoryCounts = newCounts;
-      this.updateCategoryFilterUI();
-    }
-
-    updateUI() {
-      // this.updateLanguageFilterUI(); // Removed language filter UI update
-      this.updateCategoryFilterUI();
-      this.updateSongsUI();
-      this.updateSelectedCategoriesUI();
-      this.updatePanelUI();
-      this.updateClearButtonState();
-      this.toggleSearchClearButton();
-      this.updateFloatingButtonsState();
-    }
-
-    // updateLanguageFilterUI() { // Removed language filter UI method
-    //   this.elements.languageFilter.innerHTML = '';
-
-    //   const sortedLanguages = Array.from(this.state.languages).sort();
-      
-    //   sortedLanguages.forEach(language => {
-    //     const button = document.createElement('button');
-    //     button.className = `px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium text-xs sm:text-sm transition-colors ${
-    //       this.state.currentLanguageFilter === language ? 'bg-indigo-600 text-white hover:bg-indigo-700' : ''
-    //     }`;
-    //     button.textContent = language;
-    //     button.addEventListener('click', () => {
-    //       this.state.currentLanguageFilter = this.state.currentLanguageFilter === language ? 'all' : language;
-    //       this.updateLanguageFilterUI();
-    //       this.filterSongs();
-    //       this.updateClearButtonState();
-    //     });
-    //     this.elements.languageFilter.appendChild(button);
-    //   });
-    // }
-
-    updateCategoryFilterUI() {
-      this.elements.categoryFilter.innerHTML = '';
-
-      const sortedCategories = Array.from(this.state.categories).sort((a, b) => {
-        const orderA = this.state.categoryOrder[a] !== undefined ? this.state.categoryOrder[a] : Number.MAX_SAFE_INTEGER;
-        const orderB = this.state.categoryOrder[b] !== undefined ? this.state.categoryOrder[b] : Number.MAX_SAFE_INTEGER;
-        if (orderA !== orderB) {
-          return orderA - orderB;
-        }
-        // If same order, sort alphabetically
-        return a.localeCompare(b);
-      });
-
-      sortedCategories.forEach(category => {
-        const button = document.createElement('button');
-        button.className = `category-button px-3 py-1.5 rounded-lg bg-purple-100 hover:bg-purple-200 text-purple-700 font-medium flex items-center text-base transition-all duration-200 ${
-          this.state.selectedCategories.has(category) ? 'selected' : ''
-        }`;
-        
-        const span = document.createElement('span');
-        span.className = 'line-clamp-1';
-        span.textContent = category;
-        button.appendChild(span);
-
-        const count = document.createElement('span');
-        count.className = `category-count ml-1.5 inline-flex items-center justify-center min-w-[20px] h-5 px-1 rounded-full text-xs font-semibold ${
-          this.state.selectedCategories.has(category) ? '' : 'bg-purple-200 text-purple-800'
-        }`;
-        count.textContent = this.state.categoryCounts[category] || 0;
-        button.appendChild(count);
-
-        button.addEventListener('click', () => this.toggleCategory(category));
-        this.elements.categoryFilter.appendChild(button);
-      });
-    }
-
-    updateSelectedCategoriesUI() {
-      this.elements.selectedCategoriesContainer.innerHTML = '';
-
-      if (this.state.selectedCategories.size > 0) {
-        Array.from(this.state.selectedCategories).forEach(category => {
-          const tag = document.createElement('div');
-          tag.className = 'filter-tag cursor-pointer text-xs px-2 py-1 rounded-full flex items-center mr-2 mb-1';
-          
-          const span = document.createElement('span');
-          span.textContent = category;
-          tag.appendChild(span);
-
-          const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-          icon.setAttribute('class', 'h-3 w-3 ml-1');
-          icon.setAttribute('fill', 'none');
-          icon.setAttribute('viewBox', '0 0 24 24');
-          icon.setAttribute('stroke', 'currentColor');
-          
-          const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-          path.setAttribute('stroke-linecap', 'round');
-          path.setAttribute('stroke-linejoin', 'round');
-          path.setAttribute('stroke-width', '2');
-          path.setAttribute('d', 'M6 18L18 6M6 6l12 12');
-          
-          icon.appendChild(path);
-          tag.appendChild(icon);
-
-          tag.addEventListener('click', () => this.toggleCategory(category));
-          this.elements.selectedCategoriesContainer.appendChild(tag);
-        });
-      } else {
-        const emptyText = document.createElement('span');
-        emptyText.className = 'empty-categories-text text-xs';
-        emptyText.textContent = '尚未選擇任何分類';
-        this.elements.selectedCategoriesContainer.appendChild(emptyText);
-      }
-      
-      this.updateClearButtonState();
-      this.updateFloatingButtonsState();
-    }
-
-    updateSongsUI() {
-      this.elements.songsGrid.innerHTML = '';
-      this.elements.songCount.textContent = this.state.filteredSongs.length;
-
-      if (this.state.filteredSongs.length === 0) {
-        this.elements.emptyState.classList.remove('hidden');
-      } else {
-        this.elements.emptyState.classList.add('hidden');
-        
-        this.state.filteredSongs.forEach(song => {
-          const card = this.createSongCard(song);
-          this.elements.songsGrid.appendChild(card);
-        });
-      }
-      
-      this.updateSelectedSongsUI();
-    }
-
-    updateSelectedSongsUI() {
-      document.querySelectorAll('.song-card').forEach(card => {
-        const songId = parseInt(card.dataset.songId);
-        if (this.state.selectedSongs.has(songId)) {
-          card.classList.add('selected');
-        } else {
-          card.classList.remove('selected');
-        }
-      });
-    }
-
-    createSongCard(song) {
-      const isSelected = this.state.selectedSongs.has(song.id);
+  // 設置事件監聽器
+  function setupEventListeners() {
+    // 搜索框
+    searchInput.addEventListener('input', () => {
+      filterSongs();
+      toggleSearchClearButton();
+    });
     
-      const card = document.createElement('div');
-      // Removed dynamic language color border, using a consistent border-gray-300
-      card.className = `song-card bg-white rounded-lg p-2.5 border-l-4 border-gray-300 hover:border-indigo-500 relative transition-all duration-300 hover:-translate-y-1 cursor-pointer ${isSelected ? 'selected' : ''}`;
-      card.dataset.songId = song.id;
+    // 搜索框清除按鈕
+    searchClear.addEventListener('click', () => {
+      searchInput.value = '';
+      filterSongs();
+      toggleSearchClearButton();
+      searchInput.focus();
+    });
+
+    // 清除分類按鈕 (篩選處的按鈕)
+    clearCategoriesButton.addEventListener('click', () => {
+      clearCategories(); // 保持只清除分類的功能
+    });
     
-      card.addEventListener('click', () => this.toggleSongSelection(song.id));
+    // 浮動清除全部按鈕
+    floatingClearAll.addEventListener('click', () => { // Changed event listener
+      resetAllFiltersAndSelections(); // Call the new function to reset everything
+    });
 
-      // Title
-      const title = document.createElement('h3');
-      title.className = 'text-lg font-bold text-gray-800 line-clamp-2';
-      title.textContent = song.title || '未知歌曲';
-      card.appendChild(title);
-
-      // Artist and language
-      const artistLangContainer = document.createElement('div');
-      artistLangContainer.className = 'flex flex-wrap justify-between items-center mt-1 gap-1';
-
-      const artist = document.createElement('p');
-      artist.className = 'text-xs sm:text-sm text-gray-600 line-clamp-1 mr-1';
-      artist.textContent = song.artist || '未知歌手';
-      artistLangContainer.appendChild(artist);
-
-      // Removed language tag from song card
-      // if (song.language) {
-      //   const language = document.createElement('span');
-      //   language.className = `language-tag px-1.5 py-0.5 text-xs rounded-full ${this.getLanguageClass(song.language)} whitespace-nowrap`;
-      //   language.textContent = song.language;
-      //   artistLangContainer.appendChild(language);
-      // }
-
-      card.appendChild(artistLangContainer);
-
-      // Category tags
-      if (song.categories && song.categories.length > 0) {
-        const categoriesContainer = document.createElement('div');
-        categoriesContainer.className = 'mt-1 flex flex-wrap';
-
-        song.categories.forEach(category => {
-          if (category) {
-            const tag = document.createElement('span');
-            tag.className = `inline-block px-1 py-0.5 text-xs rounded-full mr-1 mb-0.5 cursor-pointer ${
-              this.state.selectedCategories.has(category)
-                ? 'bg-purple-200 text-purple-800 font-medium'
-                : 'bg-purple-100 text-purple-800'
-            }`;
-            tag.textContent = category;
-            tag.addEventListener('click', (e) => {
-              e.stopPropagation();
-              this.toggleCategory(category);
-            });
-            categoriesContainer.appendChild(tag);
-          }
-        });
-
-        card.appendChild(categoriesContainer);
-      }
-
-      // Notes
-      if (song.notes) {
-        const notes = document.createElement('p');
-        notes.className = 'mt-1 text-xs text-gray-500 line-clamp-2';
-        
-        const noteLabel = document.createElement('span');
-        noteLabel.className = 'font-medium';
-        noteLabel.textContent = '備註: ';
-        notes.appendChild(noteLabel);
-        
-        notes.appendChild(document.createTextNode(song.notes));
-        card.appendChild(notes);
-      }
-
-      return card;
-    }
-
-    updatePanelUI() {
-      this.elements.panelSongCount.textContent = this.state.selectedSongs.size;
-      this.elements.selectedCount.textContent = this.state.selectedSongs.size;
-      
-      this.elements.selectedSongsList.innerHTML = '';
-      
-      if (this.state.selectedSongs.size === 0) {
-        this.elements.panelEmptyMessage.style.display = 'block';
-        this.elements.selectedSongsList.appendChild(this.elements.panelEmptyMessage);
-        // If panel is open and selection is empty, close it
-        if (this.state.isPanelOpen) {
-          this.togglePanel();
-        }
-        return;
-      }
-      
-      this.elements.panelEmptyMessage.style.display = 'none';
-      
-      const selectedSongsArray = this.state.allSongs
-        .filter(song => this.state.selectedSongs.has(song.id))
-        .sort((a, b) => a.title.localeCompare(b.title));
-      
-      selectedSongsArray.forEach(song => {
-        // const colorClass = this.getLanguageColorClass(song.language); // Removed language color class
-        
-        const songItem = document.createElement('div');
-        // Removed dynamic language color class from selected-song-item
-        songItem.className = `selected-song-item bg-white p-2 flex items-center`; 
-        songItem.innerHTML = `
-          <div class="flex-1 min-w-0 pr-2">
-            <h4 class="font-medium text-gray-800 text-sm line-clamp-1">${song.title || '未知歌曲'}</h4>
-            <p class="text-xs text-gray-600 line-clamp-1">${song.artist || '未知歌手'}</p>
-          </div>
-          <button class="remove-btn" data-id="${song.id}" aria-label="移除歌曲">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        `;
-        
-        this.elements.selectedSongsList.appendChild(songItem);
-        
-        songItem.querySelector('.remove-btn').addEventListener('click', (e) => {
-          e.stopPropagation();
-          const songId = parseInt(e.target.closest('.remove-btn').dataset.id);
-          this.state.selectedSongs.delete(songId);
-          this.updateSelectedSongsUI();
-          this.updatePanelUI();
-        });
+    // 浮動置頂按鈕
+    floatingBackToTop.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
       });
-      
-      this.updateClearButtonState();
-      this.updateFloatingButtonsState();
-    }
+    });
 
-    // Utility methods
-    toggleSongSelection(songId) {
-      if (this.state.selectedSongs.has(songId)) {
-        this.state.selectedSongs.delete(songId);
-      } else {
-        this.state.selectedSongs.add(songId);
-      }
-      
-      this.updateSelectedSongsUI();
-      this.updatePanelUI();
-      this.updateClearButtonState(); // Ensure button state is updated
-      this.updateFloatingButtonsState();
-    }
+// 監聽滾動事件
+window.addEventListener('scroll', () => {
+  updateFloatingButtonsState(); // 只需呼叫這個函數
+});
 
-    toggleCategory(category) {
-      if (this.state.selectedCategories.has(category)) {
-        this.state.selectedCategories.delete(category);
-      } else {
-        this.state.selectedCategories.add(category);
-      }
-      
-      this.updateSelectedCategoriesUI();
-      this.updateCategoryFilterUI();
-      this.filterSongs();
-      this.updateClearButtonState();
-      this.updateFloatingButtonsState();
-    }
-
-    clearCategories() {
-      if (this.state.selectedCategories.size > 0) {
-        this.state.selectedCategories.clear();
-        this.updateSelectedCategoriesUI();
-        this.filterSongs();
-      }
-    }
-
-    clearSelection() {
-      if (this.state.selectedSongs.size > 0) {
-        this.state.selectedSongs.clear();
-        this.updateSelectedSongsUI();
-        this.updatePanelUI();
-        // If panel is open, close it after clearing selection
-        if (this.state.isPanelOpen) {
-          this.togglePanel();
-        }
-        this.updateClearButtonState(); // Ensure button state is updated after clearing
-      }
-    }
-
-    resetAllFiltersAndSelections() {
-      this.elements.searchInput.value = '';
-      this.state.selectedCategories.clear();
-      this.state.currentLanguageFilter = 'all';
-      this.state.selectedSongs.clear();
-
-      this.updateSelectedCategoriesUI();
-      // this.updateLanguageFilterUI(); // Removed language filter UI update
-      this.updatePanelUI();
-      this.filterSongs();
-      this.toggleSearchClearButton();
-      this.updateClearButtonState();
-      this.updateFloatingButtonsState();
-      // If panel is open, close it after resetting all
-      if (this.state.isPanelOpen) {
-        this.togglePanel();
-      }
-    }
-
-    togglePanel() {
-      this.state.isPanelOpen = !this.state.isPanelOpen;
-      
-      if (this.state.isPanelOpen) {
-        this.elements.selectedSongsPanel.classList.add('open');
-        this.elements.togglePanelIcon.classList.add('open');
-        this.elements.togglePanelBtn.querySelector('span').textContent = '隱藏已選歌曲';
-        this.elements.floatingButtonsContainer.classList.add('panel-open');
-      } else {
-        this.elements.selectedSongsPanel.classList.remove('open');
-        this.elements.togglePanelIcon.classList.remove('open');
-        this.elements.togglePanelBtn.querySelector('span').textContent = '查看已選歌曲';
-        this.elements.floatingButtonsContainer.classList.remove('panel-open');
-      }
-    }
-
-    copySelectedSongsToClipboard() {
-      if (this.state.selectedSongs.size === 0) return;
-      
-      const selectedSongsList = Array.from(this.state.selectedSongs).map(songId => {
-        const song = this.state.allSongs.find(s => s.id === songId);
-        if (song) {
-          const title = song.title || '未知歌曲';
-          const artist = song.artist || '未知歌手';
-          return `${artist} - ${title}`;
-        }
-        return '';
-      }).filter(text => text !== '');
-      
-      if (selectedSongsList.length > 0) {
-        this.copyToClipboard(selectedSongsList.join('\n'));
-      }
-    }
-
-    copyToClipboard(text) {
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(text)
-          .then(() => this.showToast())
-          .catch(() => this.fallbackCopyToClipboard(text));
-      } else {
-        this.fallbackCopyToClipboard(text);
-      }
-    }
+    // 重試按鈕
+    retryButton.addEventListener('click', () => {
+      retryCount = 0;
+      fetchSheetData();
+    });
     
-    fallbackCopyToClipboard(text) {
-      const textArea = document.createElement('textarea');
-      textArea.value = text;
-      textArea.style.position = 'fixed';
-      textArea.style.left = '-999999px';
-      textArea.style.top = '-999999px';
-      document.body.appendChild(textArea);
-      
-      const selected = document.getSelection().rangeCount > 0 
-        ? document.getSelection().getRangeAt(0) 
-        : false;
-      
-      textArea.select();
-      
-      try {
-        const successful = document.execCommand('copy');
-        if (successful) this.showToast();
-      } catch (err) {
-        console.error('複製失敗:', err);
+    // 底部面板相關事件
+    togglePanelBtn.addEventListener('click', () => {
+      togglePanel();
+    });
+    
+    // 清除選擇按鈕
+    clearSelectionBtn.addEventListener('click', () => {
+      if (selectedSongs.size > 0) {
+        selectedSongs.clear();
+        updateSelectedSongsUI();
+        updatePanelUI();
       }
-      
-      document.body.removeChild(textArea);
-      
-      if (selected) {
-        document.getSelection().removeAllRanges();
-        document.getSelection().addRange(selected);
+    });
+    
+    // 複製歌曲按鈕
+    copySongsBtn.addEventListener('click', () => {
+      if (selectedSongs.size > 0) {
+        copySelectedSongsToClipboard();
       }
-    }
-
-    // UI State methods
-    hasAnyFiltersOrSelections() {
-      return this.state.selectedCategories.size > 0 || 
-             this.state.currentLanguageFilter !== 'all' || 
-             this.elements.searchInput.value.trim() !== '' ||
-             this.state.selectedSongs.size > 0;
-    }
-
-    updateClearButtonState() {
-      if (this.state.selectedCategories.size > 0) {
-        this.elements.clearCategoriesButton.classList.remove('disabled');
-      } else {
-        this.elements.clearCategoriesButton.classList.add('disabled');
-      }
-
-      this.elements.copySongsBtn.disabled = this.state.selectedSongs.size === 0;
-      // Clear selection button enabled/disabled state
-      this.elements.clearSelectionBtn.disabled = this.state.selectedSongs.size === 0;
-    }
-
-    updateFloatingButtonsState() {
-      const isScrolledEnough = window.scrollY > this.config.SCROLL_THRESHOLD;
-      const hasFiltersOrSelections = this.hasAnyFiltersOrSelections();
-
-      if (isScrolledEnough) {
-        this.elements.floatingBackToTop.classList.remove('hidden');
-      } else {
-        this.elements.floatingBackToTop.classList.add('hidden');
-      }
-
-      if (isScrolledEnough && hasFiltersOrSelections) {
-        this.elements.floatingClearAll.classList.remove('hidden');
-      } else {
-        this.elements.floatingClearAll.classList.add('hidden');
-      }
-
-      if (this.state.isPanelOpen) {
-        this.elements.floatingButtonsContainer.classList.add('panel-open');
-      } else {
-        this.elements.floatingButtonsContainer.classList.remove('panel-open');
-      }
-    }
-
-    toggleSearchClearButton() {
-      if (this.elements.searchInput.value.trim() !== '') {
-        this.elements.searchClear.classList.remove('hidden');
-      } else {
-        this.elements.searchClear.classList.add('hidden');
-      }
-    }
-
-    showToast() {
-      this.elements.toastNotification.classList.remove('hidden');
-      setTimeout(() => {
-        this.elements.toastNotification.classList.add('hidden');
-      }, 2000);
-    }
-
-    showLoading() {
-      this.elements.loading.classList.remove('hidden');
-      this.elements.songsGrid.classList.add('hidden');
-      this.elements.emptyState.classList.add('hidden');
-      this.elements.error.classList.add('hidden');
-    }
-
-    hideLoading() {
-      this.elements.loading.classList.add('hidden');
-      this.elements.songsGrid.classList.remove('hidden');
-    }
-
-    showError() {
-      this.elements.error.classList.remove('hidden');
-      this.elements.songsGrid.classList.add('hidden');
-      this.elements.emptyState.classList.add('hidden');
-    }
-
-    hideError() {
-      this.elements.error.classList.add('hidden');
-    }
-
-    // Removed language color utility methods
-    // getLanguageColor(language) { /* ... */ }
-    // getLanguageClass(language) { /* ... */ }
-    // getLanguageColorClass(language) { /* ... */ }
+    });
+  }
+  
+  // 檢查是否有任何篩選條件或已選歌曲
+  function hasAnyFiltersOrSelections() {
+    return selectedCategories.size > 0 || 
+           currentLanguageFilter !== 'all' || 
+           searchInput.value.trim() !== '' ||
+           selectedSongs.size > 0; // Also check selected songs
   }
 
-  // Initialize the application when DOM is loaded
-  document.addEventListener('DOMContentLoaded', () => {
-    new SongLibraryApp();
-  });
+  // 清除分類篩選條件
+  function clearCategories() {
+    if (selectedCategories.size > 0) {
+      selectedCategories.clear();
+      updateSelectedCategoriesUI();
+      filterSongs();
+    }
+  }
+
+  // 重置所有篩選條件和已選歌曲
+  function resetAllFiltersAndSelections() {
+    // 清除搜尋框
+    searchInput.value = '';
+    
+    // 清除分類篩選
+    selectedCategories.clear();
+    
+    // 清除語言篩選
+    currentLanguageFilter = 'all';
+    
+    // 清除已選歌曲
+    selectedSongs.clear();
+
+    // 更新UI
+    updateSelectedCategoriesUI();
+    updateLanguageFilterUI();
+    updatePanelUI(); // Update panel for cleared songs
+    filterSongs(); // Re-filter to show all songs
+    toggleSearchClearButton();
+    updateClearButtonState(); // Update state of all clear buttons
+    updateFloatingButtonsState(); // Update floating button visibility
+  }
+  
+  // 切換搜索框清除按鈕顯示狀態
+  function toggleSearchClearButton() {
+    if (searchInput.value.trim() !== '') {
+      searchClear.classList.remove('hidden');
+    } else {
+      searchClear.classList.add('hidden');
+    }
+  }
+  
+  // 切換底部面板
+  function togglePanel() {
+    isPanelOpen = !isPanelOpen;
+    
+    if (isPanelOpen) {
+      selectedSongsPanel.classList.add('open');
+      togglePanelIcon.classList.add('open');
+      togglePanelBtn.querySelector('span').textContent = '隱藏已選歌曲';
+      floatingButtonsContainer.classList.add('panel-open'); // 添加面板打開時的類
+    } else {
+      selectedSongsPanel.classList.remove('open');
+      togglePanelIcon.classList.remove('open');
+      togglePanelBtn.querySelector('span').textContent = '查看已選歌曲';
+      floatingButtonsContainer.classList.remove('panel-open'); // 移除面板打開時的類
+    }
+  }
+
+  // 獲取試算表數據 - 修正版本，確保數據獲取更可靠
+  async function fetchSheetData() {
+    showLoading();
+    hideError();
+
+    try {
+      const sheetId = '1z-kl4dUioRrhJaq82O283991VPtg2PfXqx4eN5fQ9-8';
+      const apiUrl = `https://opensheet.elk.sh/${sheetId}/sheet1`;
+
+      // 使用 Promise.race 來設置超時
+      const fetchPromise = fetch(apiUrl);
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Request timed out')), 10000)
+      );
+
+      const response = await Promise.race([fetchPromise, timeoutPromise]);
+      
+      if (!response.ok) {
+        throw new Error(`Network response was not ok: ${response.status}`);
+      }
+
+      // 嘗試解析 JSON 數據
+      let data;
+      try {
+        data = await response.json();
+        
+        // 檢查數據是否為有效的數組
+        if (!Array.isArray(data)) {
+          throw new Error('Invalid data format: not an array');
+        }
+        
+        // 檢查數據是否為空
+        if (data.length === 0) {
+          throw new Error('Empty data received');
+        }
+        
+        // 檢查數據是否包含必要的字段
+        const hasValidData = data.some(item => 
+          (item.歌名 || item.title || item.Song || item.Title) && 
+          (item.歌手 || item.artist || item.Artist)
+        );
+        
+        if (!hasValidData) {
+          throw new Error('Data missing required fields');
+        }
+        
+        // 處理數據
+        processSheetData(data);
+        hideLoading();
+        console.log('Successfully loaded sheet data:', data.length, 'items');
+      } catch (jsonError) {
+        console.error('Error parsing JSON:', jsonError);
+        throw new Error('Failed to parse response data');
+      }
+    } catch (err) {
+      console.error('Error fetching sheet data:', err);
+      retryCount++;
+      
+      if (retryCount < MAX_RETRIES) {
+        console.log(`Retrying... Attempt ${retryCount} of ${MAX_RETRIES}`);
+        setTimeout(fetchSheetData, 1000 * retryCount); // 延遲時間隨重試次數增加
+      } else {
+        console.log('Using fallback data after multiple failed attempts');
+        hideLoading();
+        showError();
+        // 使用本地備用數據
+        setTimeout(() => {
+          processFallbackData();
+        }, 1500);
+      }
+    }
+  }
+
+  // 處理本地備用數據
+  function processFallbackData() {
+    processSheetData(fallbackSongs);
+    hideError();
+  }
+
+  // 處理試算表數據
+  function processSheetData(data) {
+    // 重置數據
+    allSongs = [];
+    languages = new Set();
+    categories = new Set();
+    categoryCounts = {};
+    categoryOrder = {};
+    selectedCategories.clear();
+    selectedSongs.clear();
+
+    // 首先處理 F 欄的「分類項目」來獲取分類順序
+    data.forEach((row, index) => {
+      const categoryItem = row.分類項目 || row['分類項目'] || row.CategoryItem || '';
+      if (categoryItem && categoryOrder[categoryItem] === undefined) {
+        categoryOrder[categoryItem] = Object.keys(categoryOrder).length;
+        categories.add(categoryItem);
+      }
+    });
+
+    // 處理歌曲數據
+    allSongs = data.map((row, index) => {
+      const song = {
+        id: index + 1,
+        title: row.歌名 || row.title || row.Song || row.Title || '',
+        artist: row.歌手 || row.artist || row.Artist || '',
+        language: row.語言 || row.language || row.Language || '',
+        category: row.分類 || row.category || row.Category || '',
+        notes: row.備註 || row.notes || row.Notes || '',
+        categories: []
+      };
+
+      if (song.language) {
+        languages.add(song.language);
+      }
+
+      if (song.category) {
+        const categoryList = song.category.split(',').map(cat => cat.trim());
+        song.categories = categoryList;
+
+        categoryList.forEach(cat => {
+          if (cat) {
+            categories.add(cat);
+            categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+
+            // 如果這個分類還沒有順序（不在 F 欄中），給它一個較大的順序值
+            if (categoryOrder[cat] === undefined) {
+              categoryOrder[cat] = 1000 + Object.keys(categoryOrder).length;
+            }
+          }
+        });
+      }
+
+      return song;
+    });
+
+    filteredSongs = [...allSongs];
+    updateUI();
+categoryFilter.classList.remove('hidden');
+  }
+
+  // 過濾歌曲
+  function filterSongs() {
+    const searchTerm = searchInput.value.toLowerCase();
+    
+    filteredSongs = allSongs.filter(song => {
+      // 語言過濾
+      if (currentLanguageFilter !== 'all' && song.language !== currentLanguageFilter) {
+        return false;
+      }
+
+      // 分類過濾
+      if (selectedCategories.size > 0) {
+        for (const category of selectedCategories) {
+          if (!song.categories.includes(category)) {
+            return false;
+          }
+        }
+      }
+
+      // 搜索過濾
+      if (searchTerm) {
+        return (
+          (song.title && song.title.toLowerCase().includes(searchTerm)) ||
+          (song.artist && song.artist.toLowerCase().includes(searchTerm)) ||
+          (song.language && song.language.toLowerCase().includes(searchTerm)) ||
+          (song.category && song.category.toLowerCase().includes(searchTerm)) ||
+          (song.notes && song.notes.toLowerCase().includes(searchTerm))
+        );
+      }
+
+      return true;
+    });
+
+    updateCategoryCounts();
+    updateSongsUI();
+    updateFloatingButtonsState();
+  }
+
+ // 更新浮動按鈕狀態
+function updateFloatingButtonsState() {
+  const scrollThreshold = 70; // 您希望的滾動距離
+  const isScrolledEnough = window.scrollY > scrollThreshold;
+  const hasFiltersOrSelections = hasAnyFiltersOrSelections();
+
+  // 控制「回到頂部」按鈕
+  if (isScrolledEnough) {
+    floatingBackToTop.classList.remove('hidden');
+  } else {
+    floatingBackToTop.classList.add('hidden');
+  }
+
+  // 控制「清除全部」按鈕
+  if (isScrolledEnough && hasFiltersOrSelections) {
+    floatingClearAll.classList.remove('hidden');
+  } else {
+    floatingClearAll.classList.add('hidden');
+  }
+
+  // 根據面板狀態調整浮動按鈕位置
+  if (isPanelOpen) {
+    floatingButtonsContainer.classList.add('panel-open');
+  } else {
+    floatingButtonsContainer.classList.remove('panel-open');
+  }
+}
+
+// 監聽滾動事件
+window.addEventListener('scroll', () => {
+  updateFloatingButtonsState(); // 只需呼叫這個函數
+});
+
+  // 更新分類計數
+  function updateCategoryCounts() {
+    const newCounts = {};
+
+    filteredSongs.forEach(song => {
+      if (song.categories && song.categories.length > 0) {
+        song.categories.forEach(cat => {
+          if (cat) {
+            newCounts[cat] = (newCounts[cat] || 0) + 1;
+          }
+        });
+      }
+    });
+
+    categoryCounts = newCounts;
+    updateCategoryFilterUI();
+  }
+
+  // 更新 UI
+  function updateUI() {
+    updateLanguageFilterUI();
+    updateCategoryFilterUI();
+    updateSongsUI();
+    updateSelectedCategoriesUI();
+    updatePanelUI();
+    updateClearButtonState();
+    toggleSearchClearButton();
+    updateFloatingButtonsState();
+  }
+
+  // 更新清除按鈕狀態
+  function updateClearButtonState() {
+    // 篩選處的「清除分類」按鈕只檢查 selectedCategories
+    if (selectedCategories.size > 0) {
+      clearCategoriesButton.classList.remove('disabled');
+    } else {
+      clearCategoriesButton.classList.add('disabled');
+    }
+
+    // 底部和浮動的「清除全部」按鈕檢查所有篩選和選取
+    if (hasAnyFiltersOrSelections()) {
+      // floatingClearAll.classList.remove('disabled'); // Floating button doesn't have disabled class
+    } else {
+      // floatingClearAll.classList.add('disabled'); // Floating button doesn't have disabled class
+    }
+
+    if (selectedSongs.size > 0) {
+      copySongsBtn.disabled = false;
+      clearSelectionBtn.disabled = false;
+    } else {
+      copySongsBtn.disabled = true;
+      clearSelectionBtn.disabled = true;
+    }
+  }
+
+  // 更新語言過濾器 UI
+  function updateLanguageFilterUI() {
+    languageFilter.innerHTML = '';
+
+    // 不添加"全部"按鈕，直接添加語言按鈕
+    Array.from(languages).sort().forEach(language => {
+      const button = document.createElement('button');
+      button.className = `px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium text-xs sm:text-sm transition-colors ${
+        currentLanguageFilter === language ? 'bg-indigo-600 text-white hover:bg-indigo-700' : ''
+      }`;
+      button.textContent = language;
+      button.addEventListener('click', () => {
+        if (currentLanguageFilter === language) {
+          // 如果點擊當前選中的語言，則切換回"全部"
+          currentLanguageFilter = 'all';
+        } else {
+          currentLanguageFilter = language;
+        }
+        updateLanguageFilterUI();
+        filterSongs();
+        updateClearButtonState(); // Update clear button state after language filter change
+      });
+      languageFilter.appendChild(button);
+    });
+  }
+
+  // 更新分類過濾器 UI
+  function updateCategoryFilterUI() {
+    categoryFilter.innerHTML = '';
+
+    // 按照原始順序排序分類
+    const sortedCategories = Array.from(categories).sort((a, b) => {
+      const orderA = categoryOrder[a] !== undefined ? categoryOrder[a] : Number.MAX_SAFE_INTEGER;
+      const orderB = categoryOrder[b] !== undefined ? categoryOrder[b] : Number.MAX_SAFE_INTEGER;
+      return orderA - orderB;
+    });
+
+    sortedCategories.forEach(category => {
+      const button = document.createElement('button');
+      button.className = `category-button px-3 py-1.5 rounded-lg bg-purple-100 hover:bg-purple-200 text-purple-700 font-medium flex items-center text-base transition-all duration-200 ${
+        selectedCategories.has(category) ? 'selected' : ''
+      }`;
+      
+      const span = document.createElement('span');
+      span.className = 'line-clamp-1';
+      span.textContent = category;
+      button.appendChild(span);
+
+      const count = document.createElement('span');
+      count.className = `category-count ml-1.5 inline-flex items-center justify-center min-w-[20px] h-5 px-1 rounded-full text-xs font-semibold ${
+        selectedCategories.has(category) ? '' : 'bg-purple-200 text-purple-800'
+      }`;
+      count.textContent = categoryCounts[category] || 0;
+      button.appendChild(count);
+
+      button.addEventListener('click', () => {
+        toggleCategory(category);
+      });
+
+      categoryFilter.appendChild(button);
+    });
+  }
+
+  // 更新已選擇的分類 UI
+  function updateSelectedCategoriesUI() {
+    selectedCategoriesContainer.innerHTML = '';
+
+    if (selectedCategories.size > 0) {
+      Array.from(selectedCategories).forEach(category => {
+        const tag = document.createElement('div');
+        tag.className = 'filter-tag cursor-pointer text-xs px-2 py-1 rounded-full flex items-center mr-2 mb-1';
+        
+        const span = document.createElement('span');
+        span.textContent = category;
+        tag.appendChild(span);
+
+        const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        icon.setAttribute('class', 'h-3 w-3 ml-1');
+        icon.setAttribute('fill', 'none');
+        icon.setAttribute('viewBox', '0 0 24 24');
+        icon.setAttribute('stroke', 'currentColor');
+        
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('stroke-linecap', 'round');
+        path.setAttribute('stroke-linejoin', 'round');
+        path.setAttribute('stroke-width', '2');
+        path.setAttribute('d', 'M6 18L18 6M6 6l12 12');
+        
+        icon.appendChild(path);
+        tag.appendChild(icon);
+
+        tag.addEventListener('click', () => {
+          toggleCategory(category);
+        });
+
+        selectedCategoriesContainer.appendChild(tag);
+      });
+    } else {
+      const emptyText = document.createElement('span');
+      emptyText.className = 'empty-categories-text text-xs';
+      emptyText.textContent = '尚未選擇任何分類';
+      selectedCategoriesContainer.appendChild(emptyText);
+    }
+    
+    updateClearButtonState();
+    updateFloatingButtonsState();
+  }
+
+  // 複製已選歌曲到剪貼簿
+  function copySelectedSongsToClipboard() {
+    if (selectedSongs.size === 0) {
+      return;
+    }
+    
+    const selectedSongsList = Array.from(selectedSongs).map(songId => {
+      const song = allSongs.find(s => s.id === songId);
+      if (song) {
+        return `${song.artist} - ${song.title}`.trim();
+      }
+      return '';
+    }).filter(text => text !== '');
+    
+    if (selectedSongsList.length > 0) {
+      copyToClipboard(selectedSongsList.join('\n'));
+    }
+  }
+
+  // 更新已選擇的歌曲面板 UI
+  function updatePanelUI() {
+    // 更新歌曲數量
+    panelSongCount.textContent = selectedSongs.size;
+    selectedCount.textContent = selectedSongs.size;
+    
+    // 清空現有的歌曲列表
+    selectedSongsList.innerHTML = '';
+    
+    // 如果沒有選中的歌曲，顯示空提示
+    if (selectedSongs.size === 0) {
+      panelEmptyMessage.style.display = 'block';
+      selectedSongsList.appendChild(panelEmptyMessage);
+      return;
+    }
+    
+    // 隱藏空提示
+    panelEmptyMessage.style.display = 'none';
+    
+    // 獲取選中的歌曲並排序
+    const selectedSongsArray = allSongs
+      .filter(song => selectedSongs.has(song.id))
+      .sort((a, b) => a.title.localeCompare(b.title));
+    
+    // 添加新的歌曲項目
+    selectedSongsArray.forEach(song => {
+      // 獲取語言顏色
+      const colorClass = getLanguageColorClass(song.language);
+      
+      const songItem = document.createElement('div');
+      songItem.className = `selected-song-item bg-white p-2 flex items-center ${colorClass}`;
+      songItem.innerHTML = `
+        <div class="flex-1 min-w-0 pr-2">
+          <h4 class="font-medium text-gray-800 text-sm line-clamp-1">${song.title}</h4>
+          <p class="text-xs text-gray-600 line-clamp-1">${song.artist}</p>
+        </div>
+        <button class="remove-btn" data-id="${song.id}" aria-label="移除歌曲">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      `;
+      
+      selectedSongsList.appendChild(songItem);
+      
+      // 移除歌曲項目按鈕點擊事件
+      songItem.querySelector('.remove-btn').addEventListener('click', function(e) {
+        e.stopPropagation();
+        const songId = parseInt(this.dataset.id);
+        selectedSongs.delete(songId);
+        updateSelectedSongsUI();
+        updatePanelUI();
+      });
+    });
+    
+    updateClearButtonState();
+    updateFloatingButtonsState(); // 更新浮動按鈕位置
+  }
+
+  // 獲取語言顏色類別 (用於已選歌曲項目)
+  function getLanguageColorClass(language) {
+    if (!language) return '';
+    
+    // 根據語言設置不同的左側邊框顏色
+    const colorClasses = {
+      '華語': 'before:bg-pink-500',
+      '英語': 'before:bg-blue-500',
+      '日語': 'before:bg-purple-500',
+      '韓語': 'before:bg-green-500',
+      '粵語': 'before:bg-yellow-500',
+      '西班牙語': 'before:bg-red-500',
+      '法語': 'before:bg-indigo-500'
+    };
+    
+    return colorClasses[language] || 'before:bg-gray-500';
+  }
+
+  // 更新歌曲 UI
+  function updateSongsUI() {
+    songsGrid.innerHTML = '';
+    songCount.textContent = filteredSongs.length;
+
+    if (filteredSongs.length === 0) {
+      emptyState.classList.remove('hidden');
+    } else {
+      emptyState.classList.add('hidden');
+      
+      filteredSongs.forEach(song => {
+        const card = createSongCard(song);
+        songsGrid.appendChild(card);
+      });
+    }
+    
+    // 更新已選中歌曲的視覺效果
+    updateSelectedSongsUI();
+  }
+  
+  // 更新已選中歌曲的視覺效果
+  function updateSelectedSongsUI() {
+    // 更新所有歌曲卡片的選中狀態
+    document.querySelectorAll('.song-card').forEach(card => {
+      const songId = parseInt(card.dataset.songId);
+      if (selectedSongs.has(songId)) {
+        card.classList.add('selected');
+      } else {
+        card.classList.remove('selected');
+      }
+    });
+  }
+
+  // 創建歌曲卡片
+  function createSongCard(song) {
+    const isSelected = selectedSongs.has(song.id);
+  
+    const card = document.createElement('div');
+    card.className = `song-card bg-white rounded-lg p-2.5 border-l-4 ${getLanguageColor(song.language)} hover:border-indigo-500 relative transition-all duration-300 hover:-translate-y-1 ${isSelected ? 'selected' : ''}`;
+    card.dataset.songId = song.id;
+    card.classList.add('cursor-pointer');
+  
+    card.addEventListener('click', () => {
+      toggleSongSelection(song.id);
+    });
+
+    // 標題
+    const title = document.createElement('h3');
+    title.className = 'text-lg font-bold text-gray-800 line-clamp-2';
+    title.textContent = song.title || '';
+    card.appendChild(title);
+
+    // 歌手和語言
+    const artistLangContainer = document.createElement('div');
+    artistLangContainer.className = 'flex flex-wrap justify-between items-center mt-1 gap-1';
+
+    const artist = document.createElement('p');
+    artist.className = 'text-xs sm:text-sm text-gray-600 line-clamp-1 mr-1';
+    artist.textContent = song.artist || '';
+    artistLangContainer.appendChild(artist);
+
+    if (song.language) {
+      const language = document.createElement('span');
+      language.className = `language-tag px-1.5 py-0.5 text-xs rounded-full ${getLanguageClass(song.language)} whitespace-nowrap`;
+      language.textContent = song.language;
+      artistLangContainer.appendChild(language);
+    }
+
+    card.appendChild(artistLangContainer);
+
+    // 分類標籤
+    if (song.categories && song.categories.length > 0) {
+      const categoriesContainer = document.createElement('div');
+      categoriesContainer.className = 'mt-1 flex flex-wrap';
+
+      song.categories.forEach(category => {
+        if (category) {
+          const tag = document.createElement('span');
+          tag.className = `inline-block px-1 py-0.5 text-xs rounded-full mr-1 mb-0.5 cursor-pointer ${
+            selectedCategories.has(category)
+              ? 'bg-purple-200 text-purple-800 font-medium'
+              : 'bg-purple-100 text-purple-800'
+          }`;
+          tag.textContent = category;
+          tag.addEventListener('click', (e) => {
+            e.stopPropagation(); // 防止觸發卡片的點擊事件
+            toggleCategory(category);
+          });
+          categoriesContainer.appendChild(tag);
+        }
+      });
+
+      card.appendChild(categoriesContainer);
+    }
+
+    // 備註
+    if (song.notes) {
+      const notes = document.createElement('p');
+      notes.className = 'mt-1 text-xs text-gray-500 line-clamp-2';
+      
+      const noteLabel = document.createElement('span');
+      noteLabel.className = 'font-medium';
+      noteLabel.textContent = '備註: ';
+      notes.appendChild(noteLabel);
+      
+      notes.appendChild(document.createTextNode(song.notes));
+      card.appendChild(notes);
+    }
+
+    return card;
+  }
+
+  // 切換歌曲選擇
+  function toggleSongSelection(songId) {
+    if (selectedSongs.has(songId)) {
+      selectedSongs.delete(songId);
+    } else {
+      selectedSongs.add(songId);
+    }
+    
+    updateSelectedSongsUI();
+    updatePanelUI();
+    updateClearButtonState(); // Update clear button state after song selection change
+    updateFloatingButtonsState(); // Update floating button visibility
+  }
+
+  // 切換分類選擇
+  function toggleCategory(category) {
+    if (selectedCategories.has(category)) {
+      selectedCategories.delete(category);
+    } else {
+      selectedCategories.add(category);
+    }
+    
+    updateSelectedCategoriesUI();
+    updateCategoryFilterUI();
+    filterSongs();
+    updateClearButtonState(); // Update clear button state after category filter change
+    updateFloatingButtonsState(); // Update floating button visibility
+  }
+
+  // 複製到剪貼簿
+  function copyToClipboard(text) {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          showToast();
+        })
+        .catch(err => {
+          console.error('Failed to copy: ', err);
+          fallbackCopyToClipboard(text);
+        });
+    } else {
+      fallbackCopyToClipboard(text);
+    }
+  }
+  
+  // 回退複製方法
+  function fallbackCopyToClipboard(text) {
+    // 創建一個臨時文本區域
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    
+    // 確保文本區域在視窗外
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    
+    // 保存當前選中的文本
+    const selected = document.getSelection().rangeCount > 0 
+      ? document.getSelection().getRangeAt(0) 
+      : false;
+    
+    // 選中並複製文本
+    textArea.select();
+    
+    try {
+      const successful = document.execCommand('copy');
+      if (successful) {
+        showToast();
+      } else {
+        console.error('無法複製文本');
+      }
+    } catch (err) {
+      console.error('複製失敗:', err);
+    }
+    
+    // 清理
+    document.body.removeChild(textArea);
+    
+    // 恢復原始選擇
+    if (selected) {
+      document.getSelection().removeAllRanges();
+      document.getSelection().addRange(selected);
+    }
+  }
+
+  // 顯示通知
+  function showToast() {
+    toastNotification.classList.remove('hidden');
+    setTimeout(() => {
+      toastNotification.classList.add('hidden');
+    }, 2000);
+  }
+
+  // 顯示加載中
+  function showLoading() {
+    loading.classList.remove('hidden');
+    songsGrid.classList.add('hidden');
+    emptyState.classList.add('hidden');
+    error.classList.add('hidden');
+  }
+
+  // 隱藏加載中
+  function hideLoading() {
+    loading.classList.add('hidden');
+    songsGrid.classList.remove('hidden');
+  }
+
+  // 顯示錯誤
+  function showError() {
+    error.classList.remove('hidden');
+    songsGrid.classList.add('hidden');
+    emptyState.classList.add('hidden');
+  }
+
+  // 隱藏錯誤
+  function hideError() {
+    error.classList.add('hidden');
+  }
+
+  // 獲取語言顏色
+  function getLanguageColor(language) {
+    if (!language) return 'border-gray-500';
+
+    const colors = [
+      'border-pink-500',
+      'border-blue-500',
+      'border-yellow-500',
+      'border-green-500',
+      'border-purple-500',
+      'border-red-500',
+      'border-indigo-500',
+      'border-orange-500',
+      'border-teal-500',
+    ];
+
+    let hash = 0;
+    for (let i = 0; i < language.length; i++) {
+      hash = language.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    const index = Math.abs(hash) % colors.length;
+    return colors[index];
+  }
+
+  // 獲取語言類別
+  function getLanguageClass(language) {
+    if (!language) return 'bg-gray-100 text-gray-800';
+
+    const classes = [
+      'bg-pink-100 text-pink-800',
+      'bg-blue-100 text-blue-800',
+      'bg-yellow-100 text-yellow-800',
+      'bg-green-100 text-green-800',
+      'bg-purple-100 text-purple-800',
+      'bg-red-100 text-red-800',
+      'bg-indigo-100 text-indigo-800',
+      'bg-orange-100 text-orange-800',
+      'bg-teal-100 text-teal-800',
+    ];
+
+    let hash = 0;
+    for (let i = 0; i < language.length; i++) {
+      hash = language.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    const index = Math.abs(hash) % classes.length;
+    return classes[index];
+  }
 </script>
 </body>
 </html>
