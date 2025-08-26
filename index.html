@@ -244,6 +244,10 @@
   .search-clear-button:hover { background-color: rgba(156, 163, 175, 0.4); }
   .search-clear-button.hidden { opacity: 0; visibility: hidden; }
 
+#selected-categories {
+  min-height: 25px; /* 分類框的高度，例如 50px */
+}
+
   #app { position: relative; z-index: 1; }
 
   .category-button.selected {
@@ -406,7 +410,7 @@
         <!-- Active filters -->
         <div id="active-filters" class="flex items-center mt-3">
           <div class="flex-grow px-3 py-2 rounded-lg selected-categories-container">
-            <div id="selected-categories" class="flex flex-wrap gap-1">
+            <div id="selected-categories" class="flex flex-wrap content-center">
               <!-- Selected category tags will be inserted here -->
             </div>
           </div>
@@ -996,7 +1000,7 @@
       if (this.state.selectedCategories.size > 0) {
         Array.from(this.state.selectedCategories).forEach(category => {
           const tag = document.createElement('div');
-          tag.className = 'filter-tag cursor-pointer text-xs px-2 py-1 rounded-full flex items-center mr-2 mb-1';
+          tag.className = 'filter-tag cursor-pointer text-xs px-2 py-1 rounded-full flex items-center mr-2';
           
           const span = document.createElement('span');
           span.textContent = category;
