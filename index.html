@@ -246,6 +246,9 @@
 
 #selected-categories {
   min-height: 25px; /* 分類框的高度，例如 50px */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 0px; /* 增加行與列之間的間距 */
 }
 
   #app { position: relative; z-index: 1; }
@@ -410,7 +413,7 @@
         <!-- Active filters -->
         <div id="active-filters" class="flex items-center mt-3">
           <div class="flex-grow px-3 py-2 rounded-lg selected-categories-container">
-            <div id="selected-categories" class="flex flex-wrap content-center gap-1">
+            <div id="selected-categories" class="flex flex-wrap content-center">
               <!-- Selected category tags will be inserted here -->
             </div>
           </div>
@@ -1431,6 +1434,7 @@
 </script>
 </body>
 </html>
+
 
 
 
