@@ -249,7 +249,7 @@
   min-height: 25px; /* 分類框的高度，例如 50px */
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 0px; /* 增加行與列之間的間距 */
+  gap: 4px 4px; /* 增加行與列之間的間距 */
 }
 
   #app { position: relative; z-index: 1; }
@@ -1004,7 +1004,7 @@
       if (this.state.selectedCategories.size > 0) {
         Array.from(this.state.selectedCategories).forEach(category => {
           const tag = document.createElement('div');
-          tag.className = 'filter-tag cursor-pointer text-xs px-1 py-1 rounded-full flex items-center mx-1';
+          tag.className = 'filter-tag cursor-pointer text-xs px-2 py-1 rounded-full flex items-center';
           
           const span = document.createElement('span');
           span.textContent = category;
@@ -1435,6 +1435,7 @@
 </script>
 </body>
 </html>
+
 
 
 
