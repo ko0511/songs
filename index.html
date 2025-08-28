@@ -265,6 +265,40 @@
     color: white;
   }
 
+  /* 新增分區佈局樣式 */
+  .category-section {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 4px;
+   
+    /* 添加容器包裹樣式，防止格式跑掉 */
+    background-color: #f8fafc;
+    padding: 3px 2px;
+    border-radius: 8px;
+    border: 0.5px solid #e2e8f0; 
+  }
+
+  .category-section-name {
+    flex-shrink: 0;
+    width: 50px;
+    font-weight: 600;
+    color: #6b7280;
+    font-size: 14px;
+    padding-top: 6px;
+
+  }
+
+  .category-section-buttons {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap:4px 0px
+   
+  }
+
+  
+
   .filter-tag { background-color: #e9d5ff; color: #6b21a8; }
   .selected-categories-container { background-color: #f1ebfc; }
   .empty-categories-text { color: #9333ea; opacity: 0.6; }
@@ -379,7 +413,7 @@
       <p class="text-gray-600 text-base sm:text-lg subtitle">歡迎光臨~🥂</p>
     </header>
 
-    <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8 backdrop-blur-sm bg-opacity-90">
+    <div class="bg-white rounded-xl shadow-lg p-3 sm:p-6 mb-6 sm:mb-8 backdrop-blur-sm bg-opacity-90">
       <!-- Search bar -->
       <div class="mb-3">
         <div class="relative search-glow">
@@ -403,7 +437,7 @@
       <!-- Category filters -->
       <div class="mb-4 sm:mb-5">
         <div class="flex justify-between items-center mb-1">
-          <h3 class="text-lg font-semibold text-gray-700">分類</h3>
+  
         </div>
 
         <div id="category-filter" class="flex flex-wrap hidden">
@@ -982,18 +1016,32 @@
         return a.name.localeCompare(b.name);
       });
 
+      let currentSection = null;
+      let currentSectionButtons = null;
+
       allItems.forEach(item => {
         if (item.type === 'separator') {
-          // Create separator element
-          const separator = document.createElement('div');
-          separator.className = 'category-separator w-full text-sm font-medium text-gray-500 border-t border-gray-200';
-          separator.textContent = item.name.substring(2); // Remove // prefix
-          this.elements.categoryFilter.appendChild(separator);
+          // 創建新的分區容器
+          currentSection = document.createElement('div');
+          currentSection.className = 'category-section';
+          
+          // 創建分區名稱
+          const sectionName = document.createElement('div');
+          sectionName.className = 'category-section-name';
+          sectionName.textContent = item.name.substring(2); // 移除 // 前綴
+          
+          // 創建分區按鈕容器
+          currentSectionButtons = document.createElement('div');
+          currentSectionButtons.className = 'category-section-buttons';
+          
+          currentSection.appendChild(sectionName);
+          currentSection.appendChild(currentSectionButtons);
+          this.elements.categoryFilter.appendChild(currentSection);
         } else {
-          // Create category button (existing code)
+          // 創建分類按鈕
           const category = item.name;
           const button = document.createElement('button');
-          button.className = `category-button mx-0.5 mb-2 px-2 py-1.5 rounded-lg bg-purple-100 hover:bg-purple-200 text-purple-700 font-medium flex items-center text-base transition-all duration-200 ${
+          button.className = `category-button mx-0.5 px-2 py-1.5 rounded-lg bg-purple-100 hover:bg-purple-200 text-purple-700 font-medium flex items-center text-base transition-all duration-200 ${
             this.state.selectedCategories.has(category) ? 'selected' : ''
           }`;
           
@@ -1010,7 +1058,14 @@
           button.appendChild(count);
 
           button.addEventListener('click', () => this.toggleCategory(category));
-          this.elements.categoryFilter.appendChild(button);
+          
+          // 將按鈕添加到當前分區的按鈕容器中
+          if (currentSectionButtons) {
+            currentSectionButtons.appendChild(button);
+          } else {
+            // 如果沒有分區，直接添加到主容器
+            this.elements.categoryFilter.appendChild(button);
+          }
         }
       });
     }
