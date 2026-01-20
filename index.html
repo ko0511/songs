@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<link rel="shortcut icon" href="./favicon.ico"/>
+<link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
+<link rel="manifest" href="./site.webmanifest">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>好聽的歌曲</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          indigo: {
+            50: "#eef2ff", 100: "#e0e7ff", 200: "#c7d2fe", 300: "#a5b4fc",
+            400: "#818cf8", 500: "#6366f1", 600: "#4f46e5", 700: "#4338ca",
+            800: "#3730a3", 900: "#312e81", 950: "#1e1b4b",
+          },
+          purple: {
+            50: "#faf5ff", 100: "#f3e8ff", 200: "#e9d5ff", 300: "#d8b4fe",
+            400: "#c084fc", 500: "#a855f7", 600: "#9333ea", 700: "#7942a8",
+            800: "#6b21a8", 900: "#581c87", 950: "#3b0764",
+          },
+        }
+      }
+    }
+  }
+</script>
+<style>
+  html { height: 100%; width: 100%; }
+  
+  body {
+    min-height: 100vh;
+    font-family: 'Noto Sans TC', sans-serif;
+    position: relative;
+    overflow-x: hidden;
+    padding-bottom: 70px;
+  }
+
+  body::before { 
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #e0dbec 0%, #b2a9c9 100%);
+    z-index: -10;
+  }
+
+  .search-glow {
+    position: relative;
+  }
+
+  .search-glow::before {
+    content: '';
+    position: absolute;
+    top: -3px; left: -3px; right: -3px; bottom: -3px;
+    border-radius: 0.5rem;
+    background: linear-gradient(45deg, rgba(167, 139, 250, 0), rgba(167, 139, 250, 0.5), rgba(167, 139, 250, 0));
+    z-index: -1;
+    animation: searchGlow 2s infinite alternate;
+  }
+
+  @keyframes searchGlow {
+    0% { opacity: 0.3; background-position: 0% 50%; }
+    100% { opacity: 0.6; background-position: 100% 50%; }
+  }
+
+  .title-effect {
+    letter-spacing: 0.15em;
+    margin-left: 0.15em;
+    background: linear-gradient(120deg, #a393bf, #8a7a99);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    position: relative;
+    display: inline-block;
+    text-shadow: 1px 2px 4px rgba(138, 122, 153, 0.15);
+    animation: titleShimmer 3s infinite;
+    font-weight: 800;
+    text-align: center;
+  }
+
+  @keyframes titleShimmer {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .title-effect::before {
+    content: '';
+    position: absolute;
+    top: -10px; left: -10px; right: -10px; bottom: -10px;
+    background: radial-gradient(circle at center, rgba(200, 182, 226, 0.15) 0%, rgba(200, 182, 226, 0) 70%);
+    z-index: -1;
+    border-radius: 50%;
+    filter: blur(8px);
+  }
+
+  @keyframes spinner { to { transform: rotate(360deg); } }
+  @keyframes bounce { 0%, 100% { transform: translateY(-2px); } 50% { transform: translateY(-6px); } }
+  @keyframes wobble { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+
+  .empty-icon {
+    font-size: 4rem;
+    animation: wobble 2s ease-in-out infinite;
+    display: inline-block;
+  }
+
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .song-card {
+    transition: all 0.3s ease;
+    transform: translateZ(0);
+    will-change: transform, box-shadow;
+    box-shadow: 0 5px 5px -1px rgba(0, 0, 0, 0.15), 0 0px 5px 0px rgba(0, 0, 0, 0.08);
+  }
+
+  .song-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 5px -3px rgba(0, 0, 0, 0.17), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  .floating-buttons {
+    position: fixed;
+    bottom: 11rem;
+    right: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    z-index: 60;
+    transition: bottom 0.3s ease;
+  }
+
+  .floating-buttons.panel-open { bottom: 23rem; }
+
+  .floating-button {
+    width: 3.5rem; height: 3.5rem;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    opacity: 0.7;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .floating-button:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  .back-to-top { background-color: rgba(79, 70, 229, 0.75); color: white; }
+
+  .clear-all-btn {
+    background-color: rgba(239, 68, 68, 0.75);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.2;
+    padding: 0.25rem;
+  }
+
+  .floating-button.hidden {
+    opacity: 0;
+    transform: translateY(1rem);
+    pointer-events: none;
+  }
+
+  .toast-notification {
+    position: fixed;
+    bottom: 1rem; left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    z-index: 100;
+  }
+
+  .toast-notification.hidden {
+    opacity: 0;
+    transform: translateX(-50%) translateY(1rem);
+    pointer-events: none;
+  }
+
+  .loading-spinner {
+    height: 2.5rem; width: 2.5rem;
+    border-radius: 9999px;
+    border: 4px solid #e5e7eb;
+    border-top-color: #4f46e5;
+    animation: spinner 0.6s linear infinite;
+  }
+
+  .clear-button { transition: all 0.3s ease; }
+  .clear-button.disabled {
+    opacity: 0.5;
+    background-color: rgba(239, 68, 68, 0.1);
+    color: rgba(239, 68, 68, 0.5);
+  }
+  
+  .search-clear-button {
+    position: absolute;
+    right: 2.5rem; top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 50%;
+    background-color: rgba(156, 163, 175, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+  
+  .search-clear-button:hover { background-color: rgba(156, 163, 175, 0.4); }
+  .search-clear-button.hidden { opacity: 0; visibility: hidden; }
+
+  #selected-categories {
+    min-height: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 4px;
+  }
+
+  #app { position: relative; z-index: 1; }
+
+  .category-button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #e5e7eb !important;
+    color: #9ca3af !important;
+    box-shadow: none;
+    transform: none !important;
+  }
+
+  .category-button.disabled .category-count {
+    background-color: #d1d5db !important;
+    color: #6b7280 !important;
+  }
+
+  .category-button.selected {
+    background-color: #a482c7 !important;
+    color: white !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  .category-button.selected .category-count {
+    background-color: rgba(255, 255, 255, 0.3);
+    color: white;
+  }
+
+  .category-section {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 4px;
+    background-color: #f8fafc;
+    padding: 3px 2px;
+    border-radius: 8px;
+    border: 0.5px solid #e2e8f0; 
+  }
+
+  .category-section-name {
+    flex-shrink: 0;
+    width: 50px;
+    font-weight: 600;
+    color: #6b7280;
+    font-size: 14px;
+    padding-top: 6px;
+  }
+
+  .category-section-buttons {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 0px;
+  }
+
+  .filter-tag { background-color: #e9d5ff; color: #6b21a8; }
+  .selected-categories-container { background-color: #f1ebfc; }
+  .empty-categories-text { color: #9333ea; opacity: 0.6; }
+
+  .song-card.selected {
+    border-color: #9333ea;
+    background-color: #faf5ff;
+  }
+
+  .song-card.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 0.5rem; right: 0.5rem;
+    width: 1.5rem; height: 1.5rem;
+    background-color: #9333ea;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  
+  .selected-songs-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  
+  .selected-songs-panel.open { max-height: 300px; }
+  .selected-songs-list { max-height: 200px; overflow-y: auto; }
+  .toggle-panel-btn { transition: transform 0.3s ease; }
+  .toggle-panel-btn.open { transform: rotate(180deg); }
+  
+  .bottom-control-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background-color: white;
+    border-top: 1px solid #e5e7eb;
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+    z-index: 50;
+  }
+  
+  .selected-song-item {
+    animation: fadeIn 0.3s ease;
+    transform: translateZ(0);
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .selected-song-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px -2px rgba(0, 0, 0, 0.1), 0 3px 6px -3px rgba(0, 0, 0, 0.05);
+  }
+  
+  .selected-song-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background-color: #9333ea;
+  }
+  
+  .remove-btn {
+    width: 28px; height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+  
+  .remove-btn:hover {
+    background-color: rgba(239, 68, 68, 0.2);
+    transform: scale(1.1);
+  }
+  
+  .remove-btn svg { width: 16px; height: 16px; }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JZ56RZ5546"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JZ56RZ5546');
+</script>
+</head>
+  
+<body>
+  <div id="app" class="container mx-auto px-4 py-3">
+    <header class="text-center mb-3">
+      <h1 class="text-3xl sm:text-4xl font-bold mb-1 sm:mb-2 title-effect">我的歌曲庫</h1>
+      <p class="text-gray-600 text-base sm:text-lg subtitle">歡迎光臨~🥂</p>
+    </header>
+
+    <div class="bg-white rounded-xl shadow-lg p-3 sm:p-4 mb-6 sm:mb-8 backdrop-blur-sm bg-opacity-90">
+      <div class="mb-3">
+        <div class="relative search-glow">
+          <input
+            id="search-input"
+            type="text"
+            placeholder="搜尋歌曲、歌手或語言..."
+            class="w-full pr-[70px] sm:pr-[70px] px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-700 text-sm sm:text-base"
+          />
+          <button id="search-clear" class="search-clear-button hidden" aria-label="清除搜尋">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <svg class="h-4 w-4 sm:h-5 sm:w-5 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="mb-3 sm:mb-3">
+        <div class="flex justify-between items-center mb-1">
+  
+        </div>
+
+        <div id="category-filter" class="flex flex-wrap hidden">
+          </div>
+
+        <div id="active-filters" class="flex items-center mt-1">
+          <div class="w-full px-2 py-2 rounded-lg selected-categories-container">
+            <div id="selected-categories" class="flex flex-wrap content-center">
+              </div>
+          </div>
+          <button
+            id="clear-categories"
+            class="clear-button w-24 ml-2 text-sm text-red-600 hover:text-red-800 font-medium px-2 py-1 bg-red-50 rounded-lg hover:bg-red-100 transition-colors disabled"
+          > 
+            清除分類
+          </button>
+        </div>
+      </div>
+
+      <div id="language-filter" class="hidden"></div>
+
+      <div class="flex justify-between items-center mb-3">
+        <div class="text-gray-600">
+          <span id="song-count" class="font-medium">0</span> 首歌曲
+        </div>
+      </div>
+
+      <div id="loading" class="flex justify-center py-10">
+        <div class="loading-spinner"></div>
+      </div>
+
+      <div id="error" class="text-center py-10 hidden">
+        <div class="h-16 w-16 mx-auto text-red-400 mb-4">⚠️</div>
+        <p class="text-gray-600 text-lg">無法獲取歌曲數據</p>
+        <p class="text-gray-500 mt-2">正在載入本地數據...</p>
+        <button
+          id="retry-button"
+          class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+        >
+          重試
+        </button>
+      </div>
+
+      <div id="syncing-state" class="text-center py-10 hidden">
+        <div class="loading-spinner mx-auto mb-4" style="height: 1.5rem; width: 1.5rem; border-width: 3px;"></div>
+        <p class="text-indigo-600 font-medium">正在同步最新歌單...</p>
+        <p class="text-gray-400 text-sm mt-1">請稍候，新歌馬上出現</p>
+      </div>
+
+      <div id="empty-state" class="text-center py-10 hidden">
+        <div class="empty-icon mb-4">😕</div>
+        <p class="text-gray-600 text-lg">沒有找到符合的歌曲</p>
+      </div>
+
+      <div id="songs-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 custom-scrollbar">
+        </div>
+    </div>
+
+    <div id="floating-buttons" class="floating-buttons">
+      <button id="floating-clear-all" class="floating-button clear-all-btn hidden" aria-label="初始化">
+        <span>初始化</span>
+        <span></span>
+      </button>
+      
+      <button id="floating-back-to-top" class="floating-button back-to-top hidden" aria-label="回到頂部">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+        </svg>
+      </button>
+    </div>
+
+    <div id="toast-notification" class="toast-notification hidden">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+      </svg>
+      <span>已複製到剪貼簿</span>
+    </div>
+
+    <div class="bottom-control-bar">
+      <div id="selected-songs-panel" class="selected-songs-panel border-t border-gray-200">
+        <div class="container mx-auto max-w-6xl px-4 py-2">
+          <div class="bg-purple-100 rounded-lg p-3">
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-medium text-purple-800">已選歌曲明細</h3>
+              <span class="text-sm text-purple-600">共 <span id="panel-song-count">0</span> 首</span>
+            </div>
+            <div id="selected-songs-list" class="selected-songs-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 custom-scrollbar pr-2">
+              <div class="text-center text-gray-500 py-4 col-span-full" id="panel-empty-message">
+                尚未選擇任何歌曲
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="container mx-auto max-w-6xl px-4 py-2">
+        <div class="flex flex-col sm:flex-row justify-around items-center gap-2">
+          <div class="flex items-center">
+            <span class="text-gray-700 font-medium">已選擇 <span id="selected-count">0</span> 首歌曲</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <button id="toggle-panel" class="flex items-center gap-1 px-3 py-2 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-lg font-medium">
+              <span>查看已選</span>
+              <svg id="toggle-panel-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 toggle-panel-btn" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+              </svg>
+            </button>
+            <button id="copy-songs" class="px-3 py-2 bg-purple-400 hover:bg-purple-500 text-white rounded-lg font-medium shadow-md flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+              </svg>
+              複製已選
+            </button>
+            <button 
+              id="clear-selection" 
+              class="px-3 py-2 bg-red-400 text-white rounded-lg font-medium shadow-md flex items-center gap-2 hover:bg-red-500 disabled:opacity-50 disabled:bg-red-100 disabled:text-red-300"
+            >
+              清除已選
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // Application State Management
+  class SongLibraryApp {
+    constructor() {
+      this.state = {
+        allSongs: [],
+        filteredSongs: [],
+        categories: new Set(),
+        categoryCounts: {},
+        categoryOrder: {},
+        selectedCategories: new Set(),
+        currentLanguageFilter: 'all', 
+        selectedSongs: new Set(),
+        isPanelOpen: false,
+        retryCount: 0,
+        isFetching: false, // 標記是否正在背景下載
+        isFirstLoad: true // 標記是否為首次載入
+      };
+      
+      this.renderRequestId = null; // 用於儲存 requestAnimationFrame ID
+      
+      this.config = {
+        MAX_RETRIES: 3,
+        SHEET_ID: '1z-kl4dUioRrhJaq82O283991VPtg2PfXqx4eN5fQ9-8',
+        API_TIMEOUT: 15000,
+        SCROLL_THRESHOLD: 70,
+        CACHE_KEY: 'song_library_data_v1' // 緩存鍵值
+      };
+      
+      this.fieldMappings = {
+        title: ['歌名', 'title', 'Song', 'Title', '歌曲名稱', '歌曲', 'song_title', 'songTitle'],
+        artist: ['歌手', 'artist', 'Artist', '演唱者', '歌手名稱', 'singer', 'performer'],
+        language: ['語言', 'language', 'Language', '語系', 'lang', 'Language Type'],
+        category: ['分類', 'category', 'Category', '類別', '分類標籤', 'tags', 'genre'],
+        notes: ['備註', 'notes', 'Notes', '註解', '說明', 'description', 'remark', 'comment'],
+        categoryOrder: ['分類項目', '分類項目', 'CategoryItem', 'Category Item', '分類順序', 'category_order']
+      };
+      
+      this.elements = this.initializeElements();
+      this.fallbackData = this.getFallbackData();
+      
+      this.init();
+    }
+
+    initializeElements() {
+      const getElement = (id) => document.getElementById(id);
+      
+      return {
+        searchInput: getElement('search-input'),
+        searchClear: getElement('search-clear'),
+        categoryFilter: getElement('category-filter'),
+        selectedCategoriesContainer: getElement('selected-categories'),
+        songCount: getElement('song-count'),
+        loading: getElement('loading'),
+        error: getElement('error'),
+        retryButton: getElement('retry-button'),
+        emptyState: getElement('empty-state'),
+        syncingState: getElement('syncing-state'), // 新增
+        songsGrid: getElement('songs-grid'),
+        clearCategoriesButton: getElement('clear-categories'),
+        toastNotification: getElement('toast-notification'),
+        floatingButtonsContainer: getElement('floating-buttons'),
+        floatingBackToTop: getElement('floating-back-to-top'),
+        floatingClearAll: getElement('floating-clear-all'),
+        selectedSongsPanel: getElement('selected-songs-panel'),
+        togglePanelBtn: getElement('toggle-panel'),
+        togglePanelIcon: getElement('toggle-panel-icon'),
+        selectedSongsList: getElement('selected-songs-list'),
+        panelSongCount: getElement('panel-song-count'),
+        panelEmptyMessage: getElement('panel-empty-message'),
+        selectedCount: getElement('selected-count'),
+        clearSelectionBtn: getElement('clear-selection'),
+        copySongsBtn: getElement('copy-songs')
+      };
+    }
+
+    getFallbackData() {
+      // 保留方法結構，但實際上我們會優先使用 LocalStorage 緩存
+      return [];
+    }
+
+    init() {
+      this.setupEventListeners();
+      // 1. 先嘗試讀取本地緩存 (秒開)
+      this.loadFromCache();
+      // 2. 背景更新資料
+      this.fetchSheetData();
+    }
+
+    setupEventListeners() {
+      this.elements.searchInput.addEventListener('input', () => {
+        this.filterSongs();
+        this.toggleSearchClearButton();
+      });
+      
+      this.elements.searchClear.addEventListener('click', () => {
+        this.elements.searchInput.value = '';
+        this.filterSongs();
+        this.toggleSearchClearButton();
+        this.elements.searchInput.focus();
+      });
+
+      this.elements.clearCategoriesButton.addEventListener('click', () => this.clearCategories());
+      this.elements.floatingClearAll.addEventListener('click', () => this.resetAllFiltersAndSelections());
+
+      this.elements.floatingBackToTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      window.addEventListener('scroll', () => this.updateFloatingButtonsState());
+
+      this.elements.retryButton.addEventListener('click', () => {
+        this.state.retryCount = 0;
+        this.fetchSheetData();
+      });
+      
+      this.elements.togglePanelBtn.addEventListener('click', () => this.togglePanel());
+      this.elements.clearSelectionBtn.addEventListener('click', () => this.clearSelection());
+      this.elements.copySongsBtn.addEventListener('click', () => this.copySelectedSongsToClipboard());
+    }
+
+    getFieldValue(row, fieldType) {
+      const possibleFields = this.fieldMappings[fieldType] || [];
+      for (const field of possibleFields) {
+        if (row[field] !== undefined && row[field] !== null && row[field] !== '') {
+          return String(row[field]).trim();
+        }
+      }
+      return '';
+    }
+
+    validateRowData(row) {
+      const title = this.getFieldValue(row, 'title');
+      const artist = this.getFieldValue(row, 'artist');
+      return title || artist;
+    }
+    
+    debugSpreadsheetStructure(data) {
+        if (data.length > 0) {
+            console.log('=== 試算表結構分析 ===');
+            console.log('總行數:', data.length);
+        }
+    }
+
+    // 從 LocalStorage 載入資料
+    loadFromCache() {
+      try {
+        const cachedRaw = localStorage.getItem(this.config.CACHE_KEY);
+        if (cachedRaw) {
+          const data = JSON.parse(cachedRaw);
+          if (Array.isArray(data) && data.length > 0) {
+             console.log('發現本地緩存，立即顯示');
+             // true 代表這是來自緩存的資料
+            this.processSheetData(data, true); 
+          }
+        }
+      } catch (e) {
+        console.error('讀取緩存失敗', e);
+      }
+    }
+
+    async fetchSheetData() {
+      this.state.isFetching = true; // 標記正在下載
+      
+      // 只有當完全沒有資料時，才顯示大 Loading
+      if (this.state.allSongs.length === 0) {
+        this.showLoading();
+      } else {
+        // 如果有舊資料，更新一下 UI (為了讓搜尋時若找不到能顯示"同步中")
+        this.updateSongsUI();
+      }
+      
+      this.hideError();
+
+      try {
+        console.log('開始背景獲取最新數據...');
+        const apiUrl = `https://opensheet.elk.sh/${this.config.SHEET_ID}/sheet1`;
+        
+        const fetchOptions = {
+          method: 'GET',
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
+        };
+        
+        const fetchPromise = fetch(apiUrl, fetchOptions);
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('請求超時')), this.config.API_TIMEOUT)
+        );
+
+        const response = await Promise.race([fetchPromise, timeoutPromise]);
+        
+        if (!response.ok) throw new Error(`網路回應錯誤: ${response.status}`);
+        
+        const data = await response.json();
+        
+        if (!Array.isArray(data)) throw new Error('數據格式錯誤');
+        if (data.length === 0) throw new Error('試算表為空');
+        
+        this.debugSpreadsheetStructure(data);
+        
+        const validRows = data.filter(row => this.validateRowData(row));
+        
+        if (validRows.length > 0) {
+          console.log(`網路數據獲取成功 (${validRows.length}筆)，更新緩存...`);
+          localStorage.setItem(this.config.CACHE_KEY, JSON.stringify(validRows));
+          
+          this.state.isFetching = false; // 下載完成
+          this.processSheetData(validRows, false); // 更新畫面
+        } else {
+          throw new Error('沒有找到有效的歌曲數據');
+        }
+        
+        this.hideLoading();
+        
+      } catch (err) {
+        console.error('更新失敗:', err);
+        this.state.retryCount++;
+        this.state.isFetching = false;
+        
+        // 失敗時也要更新 UI 以移除同步狀態
+        this.updateSongsUI();
+        
+        if (this.state.allSongs.length === 0) {
+            if (this.state.retryCount < this.config.MAX_RETRIES) {
+                console.log(`重試中... 第 ${this.state.retryCount} 次`);
+                setTimeout(() => this.fetchSheetData(), 2000 * this.state.retryCount);
+            } else {
+                this.hideLoading();
+                this.showError();
+            }
+        }
+      }
+    }
+
+    processSheetData(data, isFromCache = false) {
+      console.log('開始處理數據...');
+      
+      // Reset state, but keep selections
+      this.state.allSongs = [];
+      this.state.categories = new Set();
+      this.state.categoryCounts = {};
+      this.state.categoryOrder = {};
+
+      let orderIndex = 0;
+      data.forEach((row, index) => {
+        const categoryOrderValue = this.getFieldValue(row, 'categoryOrder');
+        if (categoryOrderValue && this.state.categoryOrder[categoryOrderValue] === undefined) {
+          if (categoryOrderValue.startsWith('//')) {
+            this.state.categoryOrder[categoryOrderValue] = orderIndex++;
+          } else {
+            this.state.categoryOrder[categoryOrderValue] = orderIndex++;
+            this.state.categories.add(categoryOrderValue);
+          }
+        }
+      });
+
+      this.state.allSongs = data.map((row, index) => {
+        const song = {
+          id: index + 1,
+          title: this.getFieldValue(row, 'title'),
+          artist: this.getFieldValue(row, 'artist'),
+          language: this.getFieldValue(row, 'language'),
+          category: this.getFieldValue(row, 'category'),
+          notes: this.getFieldValue(row, 'notes'),
+          categories: []
+        };
+
+        if (song.category) {
+          const categoryList = song.category
+            .split(/[,，、]/)
+            .map(cat => cat.trim())
+            .filter(cat => cat.length > 0);
+          
+          song.categories = categoryList;
+
+          categoryList.forEach(cat => {
+            this.state.categories.add(cat);
+            this.state.categoryCounts[cat] = (this.state.categoryCounts[cat] || 0) + 1;
+            if (this.state.categoryOrder[cat] === undefined) {
+              this.state.categoryOrder[cat] = 1000 + orderIndex++;
+            }
+          });
+        }
+        return song;
+      }).filter(song => song.title || song.artist);
+
+      // 初始化 filteredSongs
+      this.filterSongs(false); // false 代表不要在 filter 內部呼叫 updateUI，下面會統一呼叫
+      
+      // UI 元件更新
+      this.updateCategoryFilterUI();
+      this.updateSelectedCategoriesUI();
+      this.updatePanelUI();
+      this.updateClearButtonState();
+      this.toggleSearchClearButton();
+      this.updateFloatingButtonsState();
+      
+      // 處理顯示邏輯
+      if (isFromCache || this.state.isFirstLoad) {
+        this.updateSongsUI();
+        if (!isFromCache) this.state.isFirstLoad = false;
+      } else {
+        this.updateSongsUI();
+      }
+
+      this.elements.categoryFilter.classList.remove('hidden');
+    }
+
+    filterSongs(shouldUpdateUI = true) {
+      const searchTerm = this.elements.searchInput.value.toLowerCase().trim();
+      
+      this.state.filteredSongs = this.state.allSongs.filter(song => {
+        if (this.state.currentLanguageFilter !== 'all' && song.language !== this.state.currentLanguageFilter) {
+          return false;
+        }
+
+        if (this.state.selectedCategories.size > 0) {
+          for (const category of this.state.selectedCategories) {
+            if (!song.categories.includes(category)) {
+              return false;
+            }
+          }
+        }
+
+        if (searchTerm) {
+          const searchFields = [
+            song.title, song.artist, song.language, song.category, song.notes, ...song.categories
+          ].filter(field => field);
+          
+          return searchFields.some(field => field.toLowerCase().includes(searchTerm));
+        }
+
+        return true;
+      });
+
+      this.updateCategoryCounts();
+      if (shouldUpdateUI) {
+         this.updateSongsUI();
+         this.updateFloatingButtonsState();
+      }
+    }
+
+    updateCategoryCounts() {
+      const newCounts = {};
+      this.state.filteredSongs.forEach(song => {
+        if (song.categories && song.categories.length > 0) {
+          song.categories.forEach(cat => {
+            if (cat) newCounts[cat] = (newCounts[cat] || 0) + 1;
+          });
+        }
+      });
+      this.state.categoryCounts = newCounts;
+      this.updateCategoryFilterUI();
+    }
+
+    updateUI() {
+      // 這裡保留舊方法兼容性，主要邏輯已移至 processSheetData
+      this.updateCategoryFilterUI();
+      this.updateSongsUI();
+      this.updateSelectedCategoriesUI();
+      this.updatePanelUI();
+      this.updateClearButtonState();
+      this.toggleSearchClearButton();
+      this.updateFloatingButtonsState();
+    }
+
+    updateCategoryFilterUI() {
+      this.elements.categoryFilter.innerHTML = '';
+
+      const allItems = [];
+      Array.from(this.state.categories).forEach(category => {
+        allItems.push({
+          type: 'category',
+          name: category,
+          order: this.state.categoryOrder[category] !== undefined ? this.state.categoryOrder[category] : Number.MAX_SAFE_INTEGER
+        });
+      });
+      
+      Object.keys(this.state.categoryOrder).forEach(item => {
+        if (item.startsWith('//')) {
+          allItems.push({
+            type: 'separator',
+            name: item,
+            order: this.state.categoryOrder[item]
+          });
+        }
+      });
+      
+      allItems.sort((a, b) => {
+        if (a.order !== b.order) return a.order - b.order;
+        return a.name.localeCompare(b.name);
+      });
+
+      let currentSection = null;
+      let currentSectionButtons = null;
+
+      allItems.forEach(item => {
+        if (item.type === 'separator') {
+          currentSection = document.createElement('div');
+          currentSection.className = 'category-section';
+          
+          const sectionName = document.createElement('div');
+          sectionName.className = 'category-section-name';
+          sectionName.textContent = item.name.substring(2);
+          
+          currentSectionButtons = document.createElement('div');
+          currentSectionButtons.className = 'category-section-buttons';
+          
+          currentSection.appendChild(sectionName);
+          currentSection.appendChild(currentSectionButtons);
+          this.elements.categoryFilter.appendChild(currentSection);
+        } else {
+          const category = item.name;
+          const button = document.createElement('button');
+          const count = this.state.categoryCounts[category] || 0;
+          const isDisabled = count === 0 && !this.state.selectedCategories.has(category);
+
+          // 修正點：在這裡把被遺漏的顏色樣式加回來了
+          // bg-purple-100 hover:bg-purple-200 text-purple-700
+          button.className = `category-button mx-0.5 px-2 py-1.5 rounded-lg font-medium flex items-center text-base transition-all duration-200
+            ${this.state.selectedCategories.has(category) ? 'selected' : 'bg-purple-100 hover:bg-purple-200 text-purple-700'} 
+            ${isDisabled ? 'disabled' : ''}`;
+          button.disabled = isDisabled;
+          
+          const span = document.createElement('span');
+          span.className = 'line-clamp-1';
+          span.textContent = category;
+          button.appendChild(span);
+
+          const countSpan = document.createElement('span');
+          countSpan.className = `category-count ml-1.5 inline-flex items-center justify-center min-w-[20px] h-5 px-1 rounded-full text-xs font-semibold ${
+            this.state.selectedCategories.has(category) ? '' : 'bg-purple-200 text-purple-800'
+          }`;
+          countSpan.textContent = this.state.categoryCounts[category] || 0;
+          button.appendChild(countSpan);
+
+          button.addEventListener('click', () => this.toggleCategory(category));
+          
+          if (currentSectionButtons) {
+            currentSectionButtons.appendChild(button);
+          } else {
+            this.elements.categoryFilter.appendChild(button);
+          }
+        }
+      });
+    }
+
+    updateSelectedCategoriesUI() {
+      this.elements.selectedCategoriesContainer.innerHTML = '';
+
+      if (this.state.selectedCategories.size > 0) {
+        Array.from(this.state.selectedCategories).forEach(category => {
+          const tag = document.createElement('div');
+          tag.className = 'filter-tag cursor-pointer text-xs px-2 py-1 rounded-full flex items-center';
+          
+          const span = document.createElement('span');
+          span.textContent = category;
+          tag.appendChild(span);
+
+          const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          icon.setAttribute('class', 'h-3 w-3 ml-1');
+          icon.setAttribute('fill', 'none');
+          icon.setAttribute('viewBox', '0 0 24 24');
+          icon.setAttribute('stroke', 'currentColor');
+          
+          const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          path.setAttribute('stroke-linecap', 'round');
+          path.setAttribute('stroke-linejoin', 'round');
+          path.setAttribute('stroke-width', '2');
+          path.setAttribute('d', 'M6 18L18 6M6 6l12 12');
+          
+          icon.appendChild(path);
+          tag.appendChild(icon);
+
+          tag.addEventListener('click', () => this.toggleCategory(category));
+          this.elements.selectedCategoriesContainer.appendChild(tag);
+        });
+      } else {
+        const emptyText = document.createElement('span');
+        emptyText.className = 'empty-categories-text text-xs';
+        emptyText.textContent = '尚未選擇任何分類';
+        this.elements.selectedCategoriesContainer.appendChild(emptyText);
+      }
+      
+      this.updateClearButtonState();
+      this.updateFloatingButtonsState();
+    }
+
+    // 關鍵優化：分批渲染 + 智慧等待狀態
+    updateSongsUI() {
+      // 取消之前的渲染排程
+      if (this.renderRequestId) {
+        cancelAnimationFrame(this.renderRequestId);
+      }
+
+      this.elements.songsGrid.innerHTML = '';
+      this.elements.songCount.textContent = this.state.filteredSongs.length;
+
+      // 隱藏所有狀態
+      this.elements.emptyState.classList.add('hidden');
+      this.elements.syncingState.classList.add('hidden');
+      this.elements.loading.classList.add('hidden'); // 確保主 Loading 也是隱藏的
+
+      if (this.state.filteredSongs.length === 0) {
+        // 如果沒歌，檢查是否正在下載中
+        if (this.state.isFetching) {
+          this.elements.syncingState.classList.remove('hidden'); // 顯示同步中
+        } else {
+          this.elements.emptyState.classList.remove('hidden'); // 顯示真的找不到
+        }
+        return;
+      }
+
+      this.elements.songsGrid.classList.remove('hidden');
+
+      // 1. 先渲染第一批 (20筆)
+      const batchSize = 20;
+      const firstBatch = this.state.filteredSongs.slice(0, batchSize);
+      
+      const fragment = document.createDocumentFragment();
+      firstBatch.forEach(song => {
+        fragment.appendChild(this.createSongCard(song));
+      });
+      this.elements.songsGrid.appendChild(fragment);
+
+      // 2. 剩下的分批渲染
+      if (this.state.filteredSongs.length > batchSize) {
+        this.renderRemainingSongs(this.state.filteredSongs.slice(batchSize));
+      }
+      
+      this.updateSelectedSongsUI();
+    }
+
+    // 輔助方法：分批渲染剩餘歌曲
+    renderRemainingSongs(songs) {
+      const chunkSize = 50;
+      let index = 0;
+
+      const renderChunk = () => {
+        if (index >= songs.length) return;
+
+        const fragment = document.createDocumentFragment();
+        const chunk = songs.slice(index, index + chunkSize);
+        
+        chunk.forEach(song => {
+          fragment.appendChild(this.createSongCard(song));
+        });
+
+        if (this.elements.songsGrid) {
+            this.elements.songsGrid.appendChild(fragment);
+            this.updateSelectedSongsUI();
+        }
+
+        index += chunkSize;
+        this.renderRequestId = requestAnimationFrame(renderChunk);
+      };
+
+      this.renderRequestId = requestAnimationFrame(renderChunk);
+    }
+
+    createSongCard(song) {
+      const isSelected = this.state.selectedSongs.has(song.id);
+    
+      const card = document.createElement('div');
+      card.className = `song-card bg-white rounded-lg p-2.5 border-l-4 border-gray-300 hover:border-indigo-500 relative transition-all duration-300 hover:-translate-y-1 cursor-pointer ${isSelected ? 'selected' : ''}`;
+      card.dataset.songId = song.id;
+    
+      card.addEventListener('click', () => this.toggleSongSelection(song.id));
+
+      const title = document.createElement('h3');
+      title.className = 'text-lg font-bold text-gray-800 line-clamp-2';
+      title.textContent = song.title || '未知歌曲';
+      card.appendChild(title);
+
+      const artistLangContainer = document.createElement('div');
+      artistLangContainer.className = 'flex flex-wrap justify-between items-center mt-1 gap-1';
+
+      const artist = document.createElement('p');
+      artist.className = 'text-xs sm:text-sm text-gray-600 line-clamp-1 mr-1';
+      artist.textContent = song.artist || '未知歌手';
+      artistLangContainer.appendChild(artist);
+
+      card.appendChild(artistLangContainer);
+
+      if (song.categories && song.categories.length > 0) {
+        const categoriesContainer = document.createElement('div');
+        categoriesContainer.className = 'mt-1 flex flex-wrap';
+
+        song.categories.forEach(category => {
+          if (category) {
+            const tag = document.createElement('span');
+            tag.className = `inline-block px-1 py-0.5 text-xs rounded-full mr-1 mb-0.5 cursor-pointer ${
+              this.state.selectedCategories.has(category)
+                ? 'bg-purple-200 text-purple-800 font-medium'
+                : 'bg-purple-100 text-purple-800'
+            }`;
+            tag.textContent = category;
+            tag.addEventListener('click', (e) => {
+              e.stopPropagation();
+              this.toggleCategory(category);
+            });
+            categoriesContainer.appendChild(tag);
+          }
+        });
+
+        card.appendChild(categoriesContainer);
+      }
+
+      if (song.notes) {
+        const notes = document.createElement('p');
+        notes.className = 'mt-1 text-xs text-gray-500 line-clamp-2';
+        
+        const noteLabel = document.createElement('span');
+        noteLabel.className = 'font-medium';
+        noteLabel.textContent = '備註: ';
+        notes.appendChild(noteLabel);
+        
+        notes.appendChild(document.createTextNode(song.notes));
+        card.appendChild(notes);
+      }
+
+      return card;
+    }
+
+    updateSelectedSongsUI() {
+      document.querySelectorAll('.song-card').forEach(card => {
+        const songId = parseInt(card.dataset.songId);
+        if (this.state.selectedSongs.has(songId)) {
+          card.classList.add('selected');
+        } else {
+          card.classList.remove('selected');
+        }
+      });
+    }
+
+    updatePanelUI() {
+      this.elements.panelSongCount.textContent = this.state.selectedSongs.size;
+      this.elements.selectedCount.textContent = this.state.selectedSongs.size;
+      
+      this.elements.selectedSongsList.innerHTML = '';
+      
+      if (this.state.selectedSongs.size === 0) {
+        this.elements.panelEmptyMessage.style.display = 'block';
+        this.elements.selectedSongsList.appendChild(this.elements.panelEmptyMessage);
+        if (this.state.isPanelOpen) {
+          this.togglePanel();
+        }
+        return;
+      }
+      
+      this.elements.panelEmptyMessage.style.display = 'none';
+      
+      const selectedSongsArray = this.state.allSongs
+        .filter(song => this.state.selectedSongs.has(song.id))
+        .sort((a, b) => a.title.localeCompare(b.title));
+      
+      selectedSongsArray.forEach(song => {
+        const songItem = document.createElement('div');
+        songItem.className = `selected-song-item bg-white p-2 flex items-center`; 
+        songItem.innerHTML = `
+          <div class="flex-1 min-w-0 pr-2">
+            <h4 class="font-medium text-gray-800 text-sm line-clamp-1">${song.title || '未知歌曲'}</h4>
+            <p class="text-xs text-gray-600 line-clamp-1">${song.artist || '未知歌手'}</p>
+          </div>
+          <button class="remove-btn" data-id="${song.id}" aria-label="移除歌曲">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        `;
+        
+        this.elements.selectedSongsList.appendChild(songItem);
+        
+        songItem.querySelector('.remove-btn').addEventListener('click', (e) => {
+          e.stopPropagation();
+          const songId = parseInt(e.target.closest('.remove-btn').dataset.id);
+          this.state.selectedSongs.delete(songId);
+          this.updateSelectedSongsUI();
+          this.updatePanelUI();
+        });
+      });
+      
+      this.updateClearButtonState();
+      this.updateFloatingButtonsState();
+    }
+
+    toggleSongSelection(songId) {
+      if (this.state.selectedSongs.has(songId)) {
+        this.state.selectedSongs.delete(songId);
+      } else {
+        this.state.selectedSongs.add(songId);
+      }
+      
+      this.updateSelectedSongsUI();
+      this.updatePanelUI();
+      this.updateClearButtonState(); 
+      this.updateFloatingButtonsState();
+    }
+
+    toggleCategory(category) {
+      if (this.state.selectedCategories.has(category)) {
+        this.state.selectedCategories.delete(category);
+      } else {
+        this.state.selectedCategories.add(category);
+      }
+      
+      this.updateSelectedCategoriesUI();
+      this.updateCategoryFilterUI();
+      this.filterSongs();
+      this.updateClearButtonState();
+      this.updateFloatingButtonsState();
+    }
+
+    clearCategories() {
+      if (this.state.selectedCategories.size > 0) {
+        this.state.selectedCategories.clear();
+        this.updateSelectedCategoriesUI();
+        this.filterSongs();
+      }
+    }
+
+    clearSelection() {
+      if (this.state.selectedSongs.size > 0) {
+        this.state.selectedSongs.clear();
+        this.updateSelectedSongsUI();
+        this.updatePanelUI();
+        if (this.state.isPanelOpen) {
+          this.togglePanel();
+        }
+        this.updateClearButtonState(); 
+        this.updateFloatingButtonsState(); 
+      }
+    }
+
+    resetAllFiltersAndSelections() {
+      this.elements.searchInput.value = '';
+      this.state.selectedCategories.clear();
+      this.state.currentLanguageFilter = 'all';
+      this.state.selectedSongs.clear();
+
+      this.updateSelectedCategoriesUI();
+      this.updatePanelUI();
+      this.filterSongs();
+      this.toggleSearchClearButton();
+      this.updateClearButtonState();
+      this.updateFloatingButtonsState();
+      if (this.state.isPanelOpen) {
+        this.togglePanel();
+      }
+    }
+
+    togglePanel() {
+      this.state.isPanelOpen = !this.state.isPanelOpen;
+      
+      if (this.state.isPanelOpen) {
+        this.elements.selectedSongsPanel.classList.add('open');
+        this.elements.togglePanelIcon.classList.add('open');
+        this.elements.togglePanelBtn.querySelector('span').textContent = '隱藏已選';
+        this.elements.floatingButtonsContainer.classList.add('panel-open');
+      } else {
+        this.elements.selectedSongsPanel.classList.remove('open');
+        this.elements.togglePanelIcon.classList.remove('open');
+        this.elements.togglePanelBtn.querySelector('span').textContent = '查看已選';
+        this.elements.floatingButtonsContainer.classList.remove('panel-open');
+      }
+    }
+
+    copySelectedSongsToClipboard() {
+      if (this.state.selectedSongs.size === 0) return;
+      
+      const selectedSongsList = Array.from(this.state.selectedSongs).map(songId => {
+        const song = this.state.allSongs.find(s => s.id === songId);
+        if (song) {
+          const title = song.title || '未知歌曲';
+          const artist = song.artist || '未知歌手';
+          return `${artist} - ${title}`;
+        }
+        return '';
+      }).filter(text => text !== '');
+      
+      if (selectedSongsList.length > 0) {
+        this.copyToClipboard(selectedSongsList.join('\n'));
+      }
+    }
+
+    copyToClipboard(text) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text)
+          .then(() => this.showToast())
+          .catch(() => this.fallbackCopyToClipboard(text));
+      } else {
+        this.fallbackCopyToClipboard(text);
+      }
+    }
+    
+    fallbackCopyToClipboard(text) {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      textArea.style.top = '-999999px';
+      document.body.appendChild(textArea);
+      
+      const selected = document.getSelection().rangeCount > 0 
+        ? document.getSelection().getRangeAt(0) 
+        : false;
+      
+      textArea.select();
+      
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) this.showToast();
+      } catch (err) {
+        console.error('複製失敗:', err);
+      }
+      
+      document.body.removeChild(textArea);
+      
+      if (selected) {
+        document.getSelection().removeAllRanges();
+        document.getSelection().addRange(selected);
+      }
+    }
+
+    hasAnyFiltersOrSelections() {
+      return this.state.selectedCategories.size > 0 || 
+             this.state.currentLanguageFilter !== 'all' || 
+             this.elements.searchInput.value.trim() !== '' ||
+             this.state.selectedSongs.size > 0;
+    }
+
+    updateClearButtonState() {
+      if (this.state.selectedCategories.size > 0) {
+        this.elements.clearCategoriesButton.classList.remove('disabled');
+      } else {
+        this.elements.clearCategoriesButton.classList.add('disabled');
+      }
+
+      this.elements.copySongsBtn.disabled = this.state.selectedSongs.size === 0;
+      this.elements.clearSelectionBtn.disabled = this.state.selectedSongs.size === 0;
+    }
+
+    updateFloatingButtonsState() {
+      const isScrolledEnough = window.scrollY > this.config.SCROLL_THRESHOLD;
+      const hasFiltersOrSelections = this.hasAnyFiltersOrSelections();
+
+      if (isScrolledEnough) {
+        this.elements.floatingBackToTop.classList.remove('hidden');
+      } else {
+        this.elements.floatingBackToTop.classList.add('hidden');
+      }
+
+      if (isScrolledEnough && hasFiltersOrSelections) {
+        this.elements.floatingClearAll.classList.remove('hidden');
+      } else {
+        this.elements.floatingClearAll.classList.add('hidden');
+      }
+
+      if (this.state.isPanelOpen) {
+        this.elements.floatingButtonsContainer.classList.add('panel-open');
+      } else {
+        this.elements.floatingButtonsContainer.classList.remove('panel-open');
+      }
+    }
+
+    toggleSearchClearButton() {
+      if (this.elements.searchInput.value.trim() !== '') {
+        this.elements.searchClear.classList.remove('hidden');
+      } else {
+        this.elements.searchClear.classList.add('hidden');
+      }
+    }
+
+    showToast() {
+      this.elements.toastNotification.classList.remove('hidden');
+      setTimeout(() => {
+        this.elements.toastNotification.classList.add('hidden');
+      }, 2000);
+    }
+
+    showLoading() {
+      this.elements.loading.classList.remove('hidden');
+      this.elements.songsGrid.classList.add('hidden');
+      this.elements.emptyState.classList.add('hidden');
+      this.elements.error.classList.add('hidden');
+      
+      // 修正：確保在顯示 Main Loading 時，Syncing Loading 是隱藏的
+      this.elements.syncingState.classList.add('hidden');
+    }
+
+    hideLoading() {
+      this.elements.loading.classList.add('hidden');
+      this.elements.songsGrid.classList.remove('hidden');
+    }
+
+    showError() {
+      this.elements.error.classList.remove('hidden');
+      this.elements.songsGrid.classList.add('hidden');
+      this.elements.emptyState.classList.add('hidden');
+    }
+
+    hideError() {
+      this.elements.error.classList.add('hidden');
+    }
+  }
+
+  // Initialize the application when DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    new SongLibraryApp();
+  });
+</script>
+</body>
+</html>
