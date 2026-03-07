@@ -589,7 +589,7 @@
       
       this.config = {
         MAX_RETRIES: 3,
-        SHEET_ID: '1z-kl4dUioRrhJaq82O283991VPtg2PfXqx4eN5fQ9-8',
+        SHEET_ID: 'heyheyhey',
         API_TIMEOUT: 15000,
         SCROLL_THRESHOLD: 70,
         CACHE_KEY: 'song_library_data_v1' // 緩存鍵值
@@ -742,11 +742,11 @@
 
       try {
         console.log('開始背景獲取最新數據...');
-        const apiUrl = `https://opensheet.elk.sh/${this.config.SHEET_ID}/sheet1`;
+        const apiUrl = `https://script.google.com/macros/s/AKfycbyfU8vJshQWw6748XHFuhnDmeU3kYwb4e56mhjzhxGGc8IIpm_dJXohANQuVo0NjRFULQ/exec`; 
         
+        // GAS 對跨域請求有時會擋複雜標頭，純 GET 請求不帶 headers 比較保險
         const fetchOptions = {
-          method: 'GET',
-          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
+          method: 'GET'
         };
         
         const fetchPromise = fetch(apiUrl, fetchOptions);
