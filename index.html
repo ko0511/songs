@@ -1,3 +1,4 @@
+
 <!-- 
  *© 2025 web-k11. All rights reserved.
  * 本程式碼受著作權法保護，未經授權禁止商業使用、修改或完整轉載。
@@ -589,7 +590,10 @@
         isPanelOpen: false,
         retryCount: 0,
         isFetching: false, // 標記是否正在背景下載
-        isFirstLoad: true // 標記是否為首次載入
+        isFirstLoad: true, // 標記是否為首次載入
+        lastUpdateTimestamp: 0, 
+        displayLimit: 50,   
+        increment: 50
       };
       
       this.renderRequestId = null; // 用於儲存 requestAnimationFrame ID
@@ -599,7 +603,8 @@
         SHEET_ID: 'heyheyhey',
         API_TIMEOUT: 15000,
         SCROLL_THRESHOLD: 70,
-        CACHE_KEY: 'song_library_data_v1' // 緩存鍵值
+        CACHE_KEY: 'song_library_data_v1' ,// 緩存鍵值
+        UPDATE_COOLDOWN: 2 * 60 * 1000
       };
       
       this.fieldMappings = {
@@ -682,7 +687,16 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
 
-      window.addEventListener('scroll', () => this.updateFloatingButtonsState());
+
+      window.addEventListener('scroll', () => {
+        this.updateFloatingButtonsState();
+        this.checkForUpdate(); 
+        
+        // 👉 新增：判斷是否滑到底部附近 (距離底部 500px 內)
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
+          this.loadMoreSongs();
+        }
+      }, { passive: true });
 
       this.elements.retryButton.addEventListener('click', () => {
         this.state.retryCount = 0;
@@ -693,6 +707,45 @@
       this.elements.clearSelectionBtn.addEventListener('click', () => this.clearSelection());
       this.elements.copySongsBtn.addEventListener('click', () => this.copySelectedSongsToClipboard());
     }
+
+       checkForUpdate() {
+      // 如果已經在抓資料了，就直接退出
+      if (this.state.isFetching) return;
+
+      const now = Date.now();
+      // 如果從未更新過，或距離上次更新超過設定的冷卻時間
+      if (this.state.lastUpdateTimestamp !== 0 && (now - this.state.lastUpdateTimestamp > this.config.UPDATE_COOLDOWN)) {
+        console.log("[AutoSync] 偵測到滑動且冷卻結束，啟動背景更新...");
+        this.fetchSheetData(true); // 傳入 true 代表靜默更新
+      }
+    }
+
+// 👉 新增載入更多歌曲的方法
+    loadMoreSongs() {
+      // 算一下目前畫面上已經有幾首歌了
+      const currentLength = this.elements.songsGrid.children.length;
+      const totalFiltered = this.state.filteredSongs.length;
+
+      // 如果畫面上的歌比過濾出來的總數少，代表還有歌可以載入
+      if (currentLength < totalFiltered) {
+        // 擷取下一批 50 首歌
+        const nextBatch = this.state.filteredSongs.slice(currentLength, currentLength + this.state.increment);
+        
+        const fragment = document.createDocumentFragment();
+        nextBatch.forEach(song => {
+          fragment.appendChild(this.createSongCard(song));
+        });
+        
+        // 直接接在現有列表的最後面，完全不卡頓
+        this.elements.songsGrid.appendChild(fragment);
+        
+        // 更新狀態
+        this.state.displayLimit += this.state.increment;
+        this.updateSelectedSongsUI();
+      }
+    }
+
+
 
     getFieldValue(row, fieldType) {
       const possibleFields = this.fieldMappings[fieldType] || [];
@@ -734,27 +787,27 @@
       }
     }
 
-    async fetchSheetData() {
-      this.state.isFetching = true; // 標記正在下載
+    async fetchSheetData(isSilent = false) {
+      if (this.state.isFetching) return; // 【防護】已經在抓資料就擋掉
+      this.state.isFetching = true; // 上鎖
       
-      // 只有當完全沒有資料時，才顯示大 Loading
-      if (this.state.allSongs.length === 0) {
-        this.showLoading();
-      } else {
-        // 如果有舊資料，更新一下 UI (為了讓搜尋時若找不到能顯示"同步中")
-        this.updateSongsUI();
+      // 只有當完全沒有資料時，且不是靜默更新，才顯示大 Loading
+      if (!isSilent) {
+        if (this.state.allSongs.length === 0) {
+          this.showLoading();
+        } else {
+          this.updateSongsUI(); // 更新UI顯示同步中
+        }
       }
       
       this.hideError();
 
       try {
-        console.log('開始背景獲取最新數據...');
+        console.log(`開始${isSilent ? '背景' : ''}獲取最新數據...`);
+        // 這裡維持你原本的 API 網址
         const apiUrl = `https://script.google.com/macros/s/AKfycbxKwLZdmBp4l6Nsaq84lu1F1pOjrIDHggpEE2JLvsoacXSxVTpQlq8gjatQJ6ltn3PDsw/exec`; 
         
-        // GAS 對跨域請求有時會擋複雜標頭，純 GET 請求不帶 headers 比較保險
-        const fetchOptions = {
-          method: 'GET'
-        };
+        const fetchOptions = { method: 'GET' };
         
         const fetchPromise = fetch(apiUrl, fetchOptions);
         const timeoutPromise = new Promise((_, reject) => 
@@ -775,34 +828,39 @@
         const validRows = data.filter(row => this.validateRowData(row));
         
         if (validRows.length > 0) {
-          console.log(`網路數據獲取成功 (${validRows.length}筆)，更新緩存...`);
-          localStorage.setItem(this.config.CACHE_KEY, JSON.stringify(validRows));
+          this.state.lastUpdateTimestamp = Date.now(); // 👉 【新增】成功後記錄時間
+          console.log(`[DataService] ${isSilent ? '背景更新' : '獲取'}成功 (${validRows.length}筆)，更新緩存...`);
           
-          this.state.isFetching = false; // 下載完成
+          localStorage.setItem(this.config.CACHE_KEY, JSON.stringify(validRows));
           this.processSheetData(validRows, false); // 更新畫面
         } else {
           throw new Error('沒有找到有效的歌曲數據');
         }
         
-        this.hideLoading();
+        if (!isSilent) this.hideLoading();
         
       } catch (err) {
         console.error('更新失敗:', err);
         this.state.retryCount++;
-        this.state.isFetching = false;
         
         // 失敗時也要更新 UI 以移除同步狀態
-        this.updateSongsUI();
+        if (!isSilent) this.updateSongsUI();
         
         if (this.state.allSongs.length === 0) {
             if (this.state.retryCount < this.config.MAX_RETRIES) {
                 console.log(`重試中... 第 ${this.state.retryCount} 次`);
-                setTimeout(() => this.fetchSheetData(), 2000 * this.state.retryCount);
+                setTimeout(() => this.fetchSheetData(isSilent), 2000 * this.state.retryCount);
             } else {
-                this.hideLoading();
-                this.showError();
+                if (!isSilent) {
+                  this.hideLoading();
+                  this.showError();
+                }
             }
         }
+      } finally {
+        // 👉 【新增防護】不管成功或失敗，最後一定要把鎖解開，這樣2分鐘後才能再次觸發
+        this.state.isFetching = false; 
+        if (isSilent) this.updateSongsUI(); // 如果是背景更新，最後順便清掉同步中的 UI 標記
       }
     }
 
@@ -881,6 +939,7 @@
     }
 
     filterSongs(shouldUpdateUI = true) {
+      this.state.displayLimit = this.state.increment;
       const searchTerm = this.elements.searchInput.value.toLowerCase().trim();
       
       this.state.filteredSongs = this.state.allSongs.filter(song => {
@@ -1062,75 +1121,41 @@
 
     // 關鍵優化：分批渲染 + 智慧等待狀態
     updateSongsUI() {
-      // 取消之前的渲染排程
-      if (this.renderRequestId) {
-        cancelAnimationFrame(this.renderRequestId);
-      }
-
-      this.elements.songsGrid.innerHTML = '';
-      this.elements.songCount.textContent = this.state.filteredSongs.length;
-
       // 隱藏所有狀態
       this.elements.emptyState.classList.add('hidden');
       this.elements.syncingState.classList.add('hidden');
-      this.elements.loading.classList.add('hidden'); // 確保主 Loading 也是隱藏的
+      this.elements.loading.classList.add('hidden');
+
+      this.elements.songCount.textContent = this.state.filteredSongs.length;
+      this.elements.songsGrid.innerHTML = ''; // 清空原本的列表
 
       if (this.state.filteredSongs.length === 0) {
-        // 如果沒歌，檢查是否正在下載中
         if (this.state.isFetching) {
-          this.elements.syncingState.classList.remove('hidden'); // 顯示同步中
+          this.elements.syncingState.classList.remove('hidden'); 
         } else {
-          this.elements.emptyState.classList.remove('hidden'); // 顯示真的找不到
+          this.elements.emptyState.classList.remove('hidden'); 
         }
         return;
       }
 
       this.elements.songsGrid.classList.remove('hidden');
 
-      // 1. 先渲染第一批 (20筆)
-      const batchSize = 20;
-      const firstBatch = this.state.filteredSongs.slice(0, batchSize);
+      // 👉 關鍵：只渲染目前 displayLimit 允許的數量 (前 50 首)
+      const songsToRender = this.state.filteredSongs.slice(0, this.state.displayLimit);
       
       const fragment = document.createDocumentFragment();
-      firstBatch.forEach(song => {
+      songsToRender.forEach(song => {
         fragment.appendChild(this.createSongCard(song));
       });
       this.elements.songsGrid.appendChild(fragment);
 
-      // 2. 剩下的分批渲染
-      if (this.state.filteredSongs.length > batchSize) {
-        this.renderRemainingSongs(this.state.filteredSongs.slice(batchSize));
-      }
-      
       this.updateSelectedSongsUI();
     }
 
-    // 輔助方法：分批渲染剩餘歌曲
-    renderRemainingSongs(songs) {
-      const chunkSize = 50;
-      let index = 0;
 
-      const renderChunk = () => {
-        if (index >= songs.length) return;
 
-        const fragment = document.createDocumentFragment();
-        const chunk = songs.slice(index, index + chunkSize);
-        
-        chunk.forEach(song => {
-          fragment.appendChild(this.createSongCard(song));
-        });
 
-        if (this.elements.songsGrid) {
-            this.elements.songsGrid.appendChild(fragment);
-            this.updateSelectedSongsUI();
-        }
 
-        index += chunkSize;
-        this.renderRequestId = requestAnimationFrame(renderChunk);
-      };
-
-      this.renderRequestId = requestAnimationFrame(renderChunk);
-    }
 
     createSongCard(song) {
       const isSelected = this.state.selectedSongs.has(song.id);
@@ -1486,5 +1511,4 @@
 </body>
 
 </html>
-
 
